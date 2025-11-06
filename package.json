@@ -1,7 +1,7 @@
 {
   "name": "payload-phone-number-plugin",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Phone Number Plugin for Payload CMS.",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -14,11 +14,6 @@
       "import": "./src/exports/client.ts",
       "types": "./src/exports/client.ts",
       "default": "./src/exports/client.ts"
-    },
-    "./rsc": {
-      "import": "./src/exports/rsc.ts",
-      "types": "./src/exports/rsc.ts",
-      "default": "./src/exports/rsc.ts"
     }
   },
   "main": "./src/index.ts",
@@ -46,42 +41,46 @@
     "test:int": "vitest"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.2.0",
-    "@payloadcms/db-mongodb": "3.37.0",
-    "@payloadcms/db-postgres": "3.37.0",
-    "@payloadcms/db-sqlite": "3.37.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@payloadcms/db-mongodb": "3.62.1",
+    "@payloadcms/db-postgres": "3.62.1",
+    "@payloadcms/db-sqlite": "3.62.1",
     "@payloadcms/eslint-config": "3.9.0",
-    "@payloadcms/next": "3.37.0",
-    "@payloadcms/richtext-lexical": "3.37.0",
-    "@payloadcms/ui": "3.37.0",
-    "@playwright/test": "^1.52.0",
+    "@payloadcms/next": "3.62.1",
+    "@payloadcms/richtext-lexical": "3.62.1",
+    "@payloadcms/ui": "3.62.1",
+    "@playwright/test": "^1.56.1",
     "@swc-node/register": "1.10.9",
     "@swc/cli": "0.6.0",
-    "@types/node": "^22.5.4",
+    "@types/google-libphonenumber": "^7.4.30",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^22.19.0",
     "@types/react": "19.1.8",
     "@types/react-dom": "19.1.6",
     "copyfiles": "2.4.1",
     "cross-env": "^7.0.3",
-    "eslint": "^9.23.0",
+    "eslint": "^9.39.1",
     "eslint-config-next": "15.4.4",
-    "graphql": "^16.8.1",
+    "eslint-plugin-prettier": "^5.5.4",
+    "graphql": "^16.12.0",
+    "json-schema": "^0.4.0",
     "mongodb-memory-server": "10.1.4",
     "next": "15.4.4",
-    "open": "^10.1.0",
-    "payload": "3.37.0",
-    "prettier": "^3.4.2",
+    "open": "^10.2.0",
+    "payload": "3.62.1",
+    "prettier": "^3.6.2",
     "qs-esm": "7.0.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "rimraf": "3.0.2",
     "sharp": "0.34.2",
-    "sort-package-json": "^2.10.0",
+    "sort-package-json": "^2.15.1",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.1.2"
+    "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "payload": "^3.37.0"
+    "payload": "^3.62.1"
   },
   "engines": {
     "node": "^18.20.2 || >=20.9.0",
@@ -98,11 +97,6 @@
         "import": "./dist/exports/client.js",
         "types": "./dist/exports/client.d.ts",
         "default": "./dist/exports/client.js"
-      },
-      "./rsc": {
-        "import": "./dist/exports/rsc.js",
-        "types": "./dist/exports/rsc.d.ts",
-        "default": "./dist/exports/rsc.js"
       }
     },
     "main": "./dist/index.js",
@@ -116,5 +110,9 @@
     ]
   },
   "registry": "https://registry.npmjs.org/",
-  "dependencies": {}
+  "dependencies": {
+    "@payloadcms/translations": "^3.62.1",
+    "clsx": "^2.1.1",
+    "google-libphonenumber": "^3.2.43"
+  }
 }

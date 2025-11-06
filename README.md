@@ -1,218 +1,197 @@
-# Payload Plugin Template
+# Payload CMS Phone Number Plugin
 
-A template repo to create a [Payload CMS](https://payloadcms.com) plugin.
+[![Payload CMS](https://img.shields.io/badge/Payload%20CMS-v3-blue)](https://github.com/payloadcms/payload)
 
-Payload is built with a robust infrastructure intended to support Plugins with ease. This provides a simple, modular, and reusable way for developers to extend the core capabilities of Payload.
+This Payload CMS plugin uses [google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to format and validate phone numbers.
 
-To build your own Payload plugin, all you need is:
+<img width="1756" height="152" alt="Preview of the Phone Number Plugin" src="https://github.com/user-attachments/assets/220d2c84-2239-47fb-9292-c6266fd69a94" /> 
 
-- An understanding of the basic Payload concepts
-- And some JavaScript/Typescript experience
+> Admin Panel screenshot of the Phone Number field
 
-## Background
+## Features
 
-Here is a short recap on how to integrate plugins with Payload, to learn more visit the [plugin overview page](https://payloadcms.com/docs/plugins/overview).
+- Built with Payload UI components so it feels native to the Admin UI
+- As-you-type formatting
+- Validates server-side and client-side
+- Support for limiting to only some countries
+- Support for setting a default country
+- Automatic formatting and region detection when pasting phone numbers
+- i18n support for validation messages (PRs for new languages are welcome)
 
-### How to install a plugin
+## Installation
 
-To install any plugin, simply add it to your payload.config() in the Plugin array.
+Install the `payload-phone-number-plugin` package into your project
 
+```bash
+pnpm install payload-phone-number-plugin
+```
+
+Add the plugin to your Payload Config:
 ```ts
-import myPlugin from 'my-plugin'
+import { phoneNumberPlugin } from 'payload-phone-number-plugin';
 
 export const config = buildConfig({
   plugins: [
-    // You can pass options to the plugin
-    myPlugin({
-      enabled: true,
+    phoneNumberPlugin(),
+  ]
+});
+```
+
+Then you can use the phone number field:
+```ts
+import { phoneNumberField } from 'payload-phone-number-plugin';
+
+const Employees: CollectionConfig = {
+  slug: 'employees',
+  fields: [
+    phoneNumberField({
+      name: 'phoneNumber',
+      label: 'Phone Number',
+      required: true,
     }),
-  ],
+  ]
+};
+```
+
+> [!NOTE]
+> Remember to update your importMap with `generate:importmap` since this plugin adds a custom component
+
+## Field Props
+
+| Name                        | Type                                           | Required | Description                                                                                    | Default           |
+| --------------------------- | ---------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------- | ----------------- |
+| `defaultCountry`            | `RegionCode`                                   | `false`  | The default country region code for the field (ISO 3166-1 alpha-2)                             | `'US'`            |
+| `allowedCountries`          | `RegionCode[]`                                 | `false`  | Array of allowed country codes. If specified, restricts user selection to these countries only |                   |
+| `admin.cellDisplayFormat`   | `'e164'` \| `'national'` \| `'international'`  | `false`  | The format to display phone numbers in table cells                                             | `'international'` |
+
+### Example with Default Country
+
+```ts
+phoneNumberField({
+  name: 'phoneNumber',
+  label: 'Phone Number',
+  defaultCountry: 'NO', // Norway will be pre-selected
 })
 ```
 
-### Initialization
-
-The initialization process goes in the following order:
-
-1. Incoming config is validated
-2. **Plugins execute**
-3. Default options are integrated
-4. Sanitization cleans and validates data
-5. Final config gets initialized
-
-## Building the Plugin
-
-When you build a plugin, you are purely building a feature for your project and then abstracting it outside of the project.
-
-### Template Files
-
-In the Payload [plugin template](https://github.com/payloadcms/payload/tree/main/templates/plugin), you will see a common file structure that is used across all plugins:
-
-1. root folder
-2. /src folder
-3. /dev folder
-
-#### Root
-
-In the root folder, you will see various files that relate to the configuration of the plugin. We set up our environment in a similar manner in Payload core and across other projects, so hopefully these will look familiar:
-
-- **README**.md\* - This contains instructions on how to use the template. When you are ready, update this to contain instructions on how to use your Plugin.
-- **package**.json\* - Contains necessary scripts and dependencies. Overwrite the metadata in this file to describe your Plugin.
-- .**eslint**.config.js - Eslint configuration for reporting on problematic patterns.
-- .**gitignore** - List specific untracked files to omit from Git.
-- .**prettierrc**.json - Configuration for Prettier code formatting.
-- **tsconfig**.json - Configures the compiler options for TypeScript
-- .**swcrc** - Configuration for SWC, a fast compiler that transpiles and bundles TypeScript.
-- **vitest**.config.js - Config file for Vitest, defining how tests are run and how modules are resolved
-
-**IMPORTANT\***: You will need to modify these files.
-
-#### Dev
-
-In the dev folder, you’ll find a basic payload project, created with `npx create-payload-app` and the blank template.
-
-**IMPORTANT**: Make a copy of the `.env.example` file and rename it to `.env`. Update the `DATABASE_URI` to match the database you are using and your plugin name. Update `PAYLOAD_SECRET` to a unique string.
-**You will not be able to run `pnpm/yarn dev` until you have created this `.env` file.**
-
-`myPlugin` has already been added to the `payload.config()` file in this project.
+### Example with Allowed Countries
 
 ```ts
-plugins: [
-  myPlugin({
-    collections: {
-      posts: true,
-    },
-  }),
-]
+phoneNumberField({
+  name: 'phoneNumber',
+  label: 'Phone Number',
+  allowedCountries: ['NO', 'US', 'SE'], // Only these countries will be selectable
+})
 ```
 
-Later when you rename the plugin or add additional options, **make sure to update it here**.
-
-You may wish to add collections or expand the test project depending on the purpose of your plugin. Just make sure to keep this dev environment as simplified as possible - users should be able to install your plugin without additional configuration required.
-
-When you’re ready to start development, initiate the project with `pnpm/npm/yarn dev` and pull up [http://localhost:3000](http://localhost:3000) in your browser.
-
-#### Src
-
-Now that we have our environment setup and we have a dev project ready to - it’s time to build the plugin!
-
-**index.ts**
-
-The essence of a Payload plugin is simply to extend the payload config - and that is exactly what we are doing in this file.
+### Example with Default Country and Allowed Countries
 
 ```ts
-export const myPlugin =
-  (pluginOptions: MyPluginConfig) =>
-  (config: Config): Config => {
-    // do cool stuff with the config here
+phoneNumberField({
+  name: 'phoneNumber',
+  label: 'Phone Phone',
+  defaultCountry: 'NO', // Norway will be pre-selected
+  allowedCountries: ['NO', 'US', 'SE'], // Only these countries will be selectable
+})
+```
 
-    return config
+### Example with Cell Display Format
+
+```ts
+phoneNumberField({
+  name: 'phoneNumber',
+  label: 'Phone Number',
+  admin: {
+    cellDisplayFormat: 'e164', // Display as +4712345678 in table cells
+  },
+})
+```
+
+## Creating Records Programmatically
+
+When creating or updating records, pass the phone number as an E.164 string directly.
+
+The field will handle parsing and validation so it won't save unless it's a valid phone number for that field.
+
+### Using the Local API or the Payload REST API SDK
+```ts
+await payload.create({
+  collection: 'employees',
+  data: {
+    phoneNumber: '+4712345678'
   }
+})
 ```
 
-First, we receive the existing payload config along with any plugin options.
-
-From here, you can extend the config as you wish.
-
-Finally, you return the config and that is it!
-
-##### Spread Syntax
-
-Spread syntax (or the spread operator) is a feature in JavaScript that uses the dot notation **(...)** to spread elements from arrays, strings, or objects into various contexts.
-
-We are going to use spread syntax to allow us to add data to existing arrays without losing the existing data. It is crucial to spread the existing data correctly – else this can cause adverse behavior and conflicts with Payload config and other plugins.
-
-Let’s say you want to build a plugin that adds a new collection:
-
+### Using REST API
 ```ts
-config.collections = [
-  ...(config.collections || []),
-  // Add additional collections here
-]
-```
-
-First we spread the `config.collections` to ensure that we don’t lose the existing collections, then you can add any additional collections just as you would in a regular payload config.
-
-This same logic is applied to other properties like admin, hooks, globals:
-
-```ts
-config.globals = [
-  ...(config.globals || []),
-  // Add additional globals here
-]
-
-config.hooks = {
-  ...(incomingConfig.hooks || {}),
-  // Add additional hooks here
-}
-```
-
-Some properties will be slightly different to extend, for instance the onInit property:
-
-```ts
-import { onInitExtension } from './onInitExtension' // example file
-
-config.onInit = async (payload) => {
-  if (incomingConfig.onInit) await incomingConfig.onInit(payload)
-  // Add additional onInit code by defining an onInitExtension function
-  onInitExtension(pluginOptions, payload)
-}
-```
-
-If you wish to add to the onInit, you must include the **async/await**. We don’t use spread syntax in this case, instead you must await the existing `onInit` before running additional functionality.
-
-In the template, we have stubbed out some addition `onInit` actions that seeds in a document to the `plugin-collection`, you can use this as a base point to add more actions - and if not needed, feel free to delete it.
-
-##### Types.ts
-
-If your plugin has options, you should define and provide types for these options.
-
-```ts
-export type MyPluginConfig = {
-  /**
-   * List of collections to add a custom field
-   */
-  collections?: Partial<Record<CollectionSlug, true>>
-  /**
-   * Disable the plugin
-   */
-  disabled?: boolean
-}
-```
-
-If possible, include JSDoc comments to describe the options and their types. This allows a developer to see details about the options in their editor.
-
-##### Testing
-
-Having a test suite for your plugin is essential to ensure quality and stability. **Vitest** is a fast, modern testing framework that works seamlessly with Vite and supports TypeScript out of the box.
-
-Vitest organizes tests into test suites and cases, similar to other testing frameworks. We recommend creating individual tests based on the expected behavior of your plugin from start to finish.
-
-Writing tests with Vitest is very straightforward, and you can learn more about how it works in the [Vitest documentation.](https://vitest.dev/)
-
-For this template, we stubbed out `int.spec.ts` in the `dev` folder where you can write your tests.
-
-```ts
-describe('Plugin tests', () => {
-  // Create tests to ensure expected behavior from the plugin
-  it('some condition that must be met', () => {
-   // Write your test logic here
-   expect(...)
+await fetch('http://localhost:3000/api/employees', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    phoneNumber: '+4712345678'
   })
 })
 ```
 
-## Best practices
+> [!NOTE]
+> You cannot pass a phone number object, only E.164 strings are accepted.
 
-With this tutorial and the plugin template, you should have everything you need to start building your own plugin.
-In addition to the setup, here are other best practices aim we follow:
+## Querying Phone Numbers by Where
 
-- **Providing an enable / disable option:** For a better user experience, provide a way to disable the plugin without uninstalling it. This is especially important if your plugin adds additional webpack aliases, this will allow you to still let the webpack run to prevent errors.
-- **Include tests in your GitHub CI workflow**: If you’ve configured tests for your package, integrate them into your workflow to run the tests each time you commit to the plugin repository. Learn more about [how to configure tests into your GitHub CI workflow.](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs)
-- **Publish your finished plugin to NPM**: The best way to share and allow others to use your plugin once it is complete is to publish an NPM package. This process is straightforward and well documented, find out more [creating and publishing a NPM package here.](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
-- **Add payload-plugin topic tag**: Apply the tag **payload-plugin **to your GitHub repository. This will boost the visibility of your plugin and ensure it gets listed with [existing payload plugins](https://github.com/topics/payload-plugin).
-- **Use [Semantic Versioning](https://semver.org/) (SemVar)** - With the SemVar system you release version numbers that reflect the nature of changes (major, minor, patch). Ensure all major versions reference their Payload compatibility.
+When using `payload.find` or database queries, use the E.164 format since phone numbers are stored as E.164 strings:
 
-# Questions
+```typescript
+const employees = await payload.find({
+  collection: 'employees',
+  where: {
+    phoneNumber: {
+      equals: '+4712345678'
+    }
+  }
+})
+```
 
-Please contact [Payload](mailto:dev@payloadcms.com) with any questions about using this plugin template.
+The same applies when using the REST API.
+
+## TypeScript Types
+
+The plugin uses a union type pattern similar to Payload's relationship fields with depth. The field is typed as `string | PhoneNumber`.
+
+This is because phone numbers are stored as strings in the database but are transformed into objects when you read them using libphonenumber.
+
+```ts
+export interface PhoneNumber {
+  e164: string;
+  regionCode: string;
+  callingCode: string;
+  national: string;
+  international: string;
+}
+
+export interface Employee {
+  phoneNumber: string | PhoneNumber;
+}
+```
+
+Example response:
+
+```json
+{
+  "phoneNumber": {
+    "e164": "+4712345678",
+    "regionCode": "NO",
+    "callingCode": "+47",
+    "national": "12 34 56 78",
+    "international": "+47 12 34 56 78"
+  }
+}
+```
+
+## Additional Information
+
+A region code is a ISO 3166-1 alpha-2 code.
+
+List of all valid region codes can be found here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements

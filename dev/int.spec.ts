@@ -1,52 +1,136 @@
-import type { Payload } from 'payload'
+import type { Payload } from 'payload';
+import { getPayload } from 'payload';
 
-import config from '@payload-config'
-import { createPayloadRequest, getPayload } from 'payload'
-import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+import config from './payload.config.js';
 
-import { customEndpointHandler } from '../src/endpoints/customEndpointHandler.js'
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 
-let payload: Payload
+let payload: Payload;
 
 afterAll(async () => {
-  await payload.destroy()
-})
+    await payload.destroy();
+});
 
 beforeAll(async () => {
-  payload = await getPayload({ config })
-})
+    payload = await getPayload({ config: await config });
+});
 
-describe('Plugin integration tests', () => {
-  test('should query custom endpoint added by plugin', async () => {
-    const request = new Request('http://localhost:3000/api/my-plugin-endpoint', {
-      method: 'GET',
-    })
+describe('Phone Number Plugin integration tests', () => {
+    test('can create employee with phone number field', async () => {
+        const employee = await payload.create({
+            collection: 'employees',
+            data: {
+                name: 'Test',
+                phoneNumber: '+4745360001',
+            },
+        });
 
-    const payloadRequest = await createPayloadRequest({ config, request })
-    const response = await customEndpointHandler(payloadRequest)
-    expect(response.status).toBe(200)
+        expect(employee.name).toBe('Test');
+        expect(employee.phoneNumber).toEqual({
+            e164: '+4745360001',
+            regionCode: 'NO',
+            callingCode: '+47',
+            national: '45 36 00 01',
+            international: '+47 45 36 00 01',
+        });
+    });
 
-    const data = await response.json()
-    expect(data).toMatchObject({
-      message: 'Hello from custom endpoint',
-    })
-  })
+    test('rejects invalid phone number', async () => {
+        await expect(
+            payload.create({
+                collection: 'employees',
+                data: {
+                    name: 'Test',
+                    phoneNumber: 'invalid-phone-number',
+                },
+            })
+        ).rejects.toThrow();
+    });
 
-  test('can create post with custom text field added by plugin', async () => {
-    const post = await payload.create({
-      collection: 'posts',
-      data: {
-        addedByPlugin: 'added by plugin',
-      },
-    })
-    expect(post.addedByPlugin).toBe('added by plugin')
-  })
+    test('can create employee without optional phone number', async () => {
+        const employee = await payload.create({
+            collection: 'employees',
+            data: {
+                name: 'Test',
+                phoneNumber: '+4745360001',
+                phoneNumberNotRequired: null,
+            },
+        });
 
-  test('plugin creates and seeds plugin-collection', async () => {
-    expect(payload.collections['plugin-collection']).toBeDefined()
+        expect(employee.name).toBe('Test');
+        expect(employee.phoneNumberNotRequired).toBeNull();
+    });
 
-    const { docs } = await payload.find({ collection: 'plugin-collection' })
+    test('rejects phone number from disallowed country', async () => {
+        await expect(
+            payload.create({
+                collection: 'employees',
+                data: {
+                    name: 'Test',
+                    phoneNumber: '+16505553434',
+                },
+            })
+        ).rejects.toThrow();
+    });
 
-    expect(docs).toHaveLength(1)
-  })
-})
+    test('can update existing phone number from one country to another', async () => {
+        const employee = await payload.create({
+            collection: 'employees',
+            data: {
+                name: 'Test',
+                phoneNumber: '+4745360001',
+                phoneNumberAnyCountry: '+4745360001',
+            },
+        });
+
+        expect(employee.phoneNumberAnyCountry).toMatchObject({
+            e164: '+4745360001',
+            regionCode: 'NO',
+        });
+
+        const updatedEmployee = await payload.update({
+            collection: 'employees',
+            id: employee.id,
+            data: {
+                phoneNumberAnyCountry: '+16505553434',
+            },
+        });
+
+        expect(updatedEmployee.phoneNumberAnyCountry).toMatchObject({
+            e164: '+16505553434',
+            regionCode: 'US',
+        });
+    });
+
+    test('accepts phone number from allowed country in multi-country field', async () => {
+        const employee = await payload.create({
+            collection: 'employees',
+            data: {
+                name: 'Test',
+                phoneNumber: '+4745360001',
+                phoneNumberNotRequired: '+16505553434',
+            },
+        });
+
+        expect(employee.phoneNumberNotRequired).toMatchObject({
+            e164: '+16505553434',
+            regionCode: 'US',
+        });
+    });
+
+    test('accepts phone number from any country when no restriction', async () => {
+        const employee = await payload.create({
+            collection: 'employees',
+            data: {
+                name: 'Test',
+                phoneNumber: '+4745360001',
+                phoneNumberAnyCountry: '+16505553434',
+            },
+        });
+
+        expect(employee.phoneNumberAnyCountry).toMatchObject({
+            e164: '+16505553434',
+            regionCode: 'US',
+        });
+    });
+});
