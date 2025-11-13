@@ -38,7 +38,9 @@
     "prepublishOnly": "pnpm clean && pnpm build",
     "test": "pnpm test:int && pnpm test:e2e",
     "test:e2e": "playwright test",
-    "test:int": "vitest"
+    "test:int": "vitest",
+    "test:ci": "pnpm test:int",
+    "release": "release-it"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -72,6 +74,8 @@
     "qs-esm": "7.0.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "release-it": "^19.0.6",
+    "release-it-pnpm": "^4.6.6",
     "rimraf": "3.0.2",
     "sharp": "0.34.2",
     "sort-package-json": "^2.15.1",
