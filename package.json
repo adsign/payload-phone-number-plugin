@@ -4,6 +4,10 @@
   "description": "Phone Number Plugin for Payload CMS.",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adsign/payload-phone-number-plugin.git"
+  },
   "exports": {
     ".": {
       "import": "./src/index.ts",
