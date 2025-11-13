@@ -1,0 +1,124 @@
+@import '~@payloadcms/ui/scss';
+
+@layer payload-default {
+    .phone-number__region-code-select {
+        display: none;
+        position: absolute !important;
+        top: calc(100% + -1px);
+        z-index: 999;
+        width: 100%;
+    }
+
+    .phone-number__region-code-select-open .phone-number__input-field input {
+        border-bottom-left-radius: 0px !important;
+        border-bottom-right-radius: 0px !important;
+    }
+
+    .phone-number__region-code-select-open .phone-number__region-code-select {
+        display: block;
+    }
+
+    .phone-number__region-code-select .rs__control {
+        border-radius: 0px !important;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .phone-number__input-container {
+        position: relative;
+    }
+
+    .phone-number__input-field .field-type__wrap {
+        display: flex;
+        align-items: stretch;
+        @include formInput();
+        width: auto;
+        height: base(2);
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .phone-number__input-field.read-only .field-type__wrap {
+        @include readOnly();
+    }
+
+    .phone-number__input-field.error .field-type__wrap {
+        @include lightInputError();
+    }
+
+    html[data-theme='dark'] .phone-number__input-field.error .field-type__wrap {
+        @include darkInputError();
+    }
+
+    .phone-number__input-field input {
+        flex: 1;
+        background: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding-left: 13px !important;
+    }
+
+    .phone-number__input-field input:focus {
+        border: none !important;
+        outline: none !important;
+    }
+
+    .phone-number__select-region-code-button {
+        background: none;
+        border: 0;
+        border-right: 1px solid var(--theme-elevation-150);
+        padding: 0 12px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 8px;
+        white-space: nowrap;
+    }
+
+    .phone-number__input-field .field-type__wrap:hover .phone-number__select-region-code-button {
+        border-right-color: var(--theme-elevation-250);
+    }
+
+    .phone-number__input-field .field-type__wrap:focus,
+    .phone-number__input-field .field-type__wrap:focus-within,
+    .phone-number__input-field .field-type__wrap:active {
+        .phone-number__select-region-code-button {
+            border-right-color: var(--theme-elevation-400);
+        }
+    }
+
+    .phone-number__input-field.read-only .field-type__wrap:hover .phone-number__select-region-code-button {
+        border-right-color: var(--theme-elevation-150);
+    }
+
+    .phone-number__input-field.error .phone-number__select-region-code-button {
+        border-right-color: var(--theme-error-500);
+    }
+
+    html[data-theme='dark'] .phone-number__input-field.error .phone-number__select-region-code-button {
+        border-right-color: var(--theme-error-400);
+    }
+
+    .phone-number__select-region-code-button svg {
+        width: 9px;
+        stroke: var(--theme-elevation-800);
+        flex-shrink: 0;
+    }
+
+    .phone-number__calling-code-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .phone-number__region-code-select-open .phone-number__input-field .field-type__wrap {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+
+    .phone-number__has-only-one-region-code .phone-number__select-region-code-button {
+        cursor: default;
+    }
+}

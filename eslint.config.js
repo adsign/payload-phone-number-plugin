@@ -1,46 +1,48 @@
-// @ts-check
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
 
-import payloadEsLintConfig from '@payloadcms/eslint-config'
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-export const defaultESLintIgnores = [
-  '**/.temp',
-  '**/.*', // ignore all dotfiles
-  '**/.git',
-  '**/.hg',
-  '**/.pnp.*',
-  '**/.svn',
-  '**/playwright.config.ts',
-  '**/vitest.config.js',
-  '**/tsconfig.tsbuildinfo',
-  '**/README.md',
-  '**/eslint.config.js',
-  '**/payload-types.ts',
-  '**/dist/',
-  '**/.yarn/',
-  '**/build/',
-  '**/node_modules/',
-  '**/temp/',
-]
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
 export default [
-  ...payloadEsLintConfig,
-  {
-    rules: {
-      'no-restricted-exports': 'off',
-    },
-  },
-  {
-    languageOptions: {
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 'latest',
-        projectService: {
-          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 40,
-          allowDefaultProject: ['scripts/*.ts', '*.js', '*.mjs', '*.spec.ts', '*.d.ts'],
+    ...compat.extends('next/typescript', 'plugin:prettier/recommended'),
+    ...compat.plugins('prettier'),
+    {
+        languageOptions: {
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                tsconfigRootDir: __dirname,
+            },
         },
-        // projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
     },
-  },
-]
+    {
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-empty-object-type': 'off',
+            '@typescript-eslint/no-unused-vars': 'off',
+            'prettier/prettier': 'warn',
+        },
+    },
+    {
+        ignores: [
+            '**/.temp',
+            '**/.*',
+            '**/.git',
+            '**/.hg',
+            '**/.pnp.*',
+            '**/.svn',
+            '**/tsconfig.tsbuildinfo',
+            '**/README.md',
+            '**/payload-types.ts',
+            '**/dist/',
+            '**/.yarn/',
+            '**/build/',
+            '**/node_modules/',
+            '**/temp/',
+        ],
+    },
+];

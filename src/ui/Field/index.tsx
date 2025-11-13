@@ -1,0 +1,124 @@
+'use client';
+
+import type { OptionObject, TextFieldClientProps } from 'payload';
+import { Select, TextInput, FieldDescription, useField } from '@payloadcms/ui';
+
+import type { ChangeEvent, FC } from 'react';
+import { useMemo, useState } from 'react';
+
+import clsx from 'clsx';
+
+import type { PhoneNumberValue, RegionCode } from '../../types.js';
+import { usePhoneNumberField, useSelectInputFocus, useHandlePhoneNumberPaste } from './hooks.js';
+
+import { countries } from '../../utilities/countries.js';
+import { mergeFieldStyles } from '../../utilities/mergeFieldStyles.js';
+
+import './index.scss';
+
+type PhoneNumberFieldProps = {
+    allowedRegionCodes?: RegionCode[];
+    defaultRegionCode?: RegionCode;
+} & TextFieldClientProps;
+
+const countryOptions: OptionObject[] = countries.map((country) => ({
+    label: `${country.emoji} ${country.callingCode} (${country.name.international})`,
+    value: country.regionCode,
+}));
+
+export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({ allowedRegionCodes, defaultRegionCode, field, path: pathFromProps }) => {
+    const { name, label, required } = field;
+
+    const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
+
+    const styles = useMemo(() => mergeFieldStyles(field), [field]);
+
+    const path = pathFromProps ?? name;
+    const { formInitializing, setValue, value, disabled, showError } = useField<PhoneNumberValue>({ path });
+
+    const { regionCode, setRegionCode, setPhoneNumberInputValue, phoneNumberInputDisplayValue, filteredCountryOptions, currentCountry, hasOnlyOneRegionCode } = usePhoneNumberField({
+        value,
+        setValue,
+        formInitializing,
+        defaultRegionCode,
+        allowedRegionCodes,
+        countryOptions,
+    });
+
+    const { selectContainerRef } = useSelectInputFocus({ isSelectOpen });
+    const { phoneInputContainerRef } = useHandlePhoneNumberPaste({ setRegionCode, setPhoneNumberInputValue });
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPhoneNumberInputValue(e.target.value);
+    };
+
+    return (
+        <div
+            className={clsx('field-type', 'text', {
+                'phone-number__region-code-select-open': isSelectOpen,
+                'phone-number__has-only-one-region-code': hasOnlyOneRegionCode,
+            })}
+            style={styles}>
+            <div className="phone-number__input-container" ref={phoneInputContainerRef}>
+                <TextInput
+                    BeforeInput={
+                        hasOnlyOneRegionCode ? (
+                            <div className="phone-number__select-region-code-button">
+                                <div className="phone-number__calling-code-container">
+                                    <span className="phone-number__emoji">{currentCountry?.emoji}</span>
+                                    <span className="phone-number__calling-code">{currentCountry?.callingCode}</span>
+                                </div>
+                            </div>
+                        ) : (
+                            <button
+                                className="phone-number__select-region-code-button phone-number__select-region-code-button-with-dropdown"
+                                onFocus={() => setIsSelectOpen(true)}
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    setIsSelectOpen(!isSelectOpen);
+                                }}
+                                type="button">
+                                <div className="phone-number__calling-code-container">
+                                    <span className="phone-number__emoji">{currentCountry?.emoji}</span>
+                                    <span className="phone-number__calling-code">{currentCountry?.callingCode}</span>
+                                </div>
+                                <svg height="8" viewBox="0 0 12 8" width="12" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11 1.48438L5.99958 6.77894L0.999163 1.48437" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.75" strokeWidth="1.8" />
+                                </svg>
+                            </button>
+                        )
+                    }
+                    className="phone-number__input-field"
+                    label={label}
+                    onChange={handleInputChange}
+                    path={path}
+                    readOnly={formInitializing || disabled}
+                    showError={showError}
+                    required={required}
+                    value={phoneNumberInputDisplayValue}
+                />
+                {!formInitializing && (
+                    <div ref={selectContainerRef}>
+                        <Select
+                            className="phone-number__region-code-select"
+                            isClearable={false}
+                            isSearchable
+                            menuIsOpen={isSelectOpen}
+                            onChange={(option) => {
+                                if (option && !Array.isArray(option)) {
+                                    setRegionCode(option.value as RegionCode);
+                                    setIsSelectOpen(false);
+                                }
+                            }}
+                            onMenuClose={() => setIsSelectOpen(false)}
+                            onMenuOpen={() => setIsSelectOpen(true)}
+                            options={filteredCountryOptions}
+                            value={filteredCountryOptions.find((option) => option.value === regionCode)}
+                        />
+                    </div>
+                )}
+            </div>
+            {field.admin?.description && <FieldDescription className="field-description" description={field.admin.description} path={path} />}
+        </div>
+    );
+};
