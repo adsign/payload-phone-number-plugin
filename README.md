@@ -4,7 +4,7 @@
 
 This Payload CMS plugin uses [google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to format and validate phone numbers.
 
-<img width="1756" height="152" alt="Preview of the Phone Number Plugin" src="https://github.com/user-attachments/assets/220d2c84-2239-47fb-9292-c6266fd69a94" /> 
+![Preview](./src/assets/preview.png)
 
 > Admin Panel screenshot of the Phone Number field
 
