@@ -68,11 +68,21 @@ export function usePhoneNumberField({
     // Prevent re-initializing the phone input more than once
     const isInitializedRef = useRef<boolean>(false);
 
-    const [regionCode, setRegionCode] = useState<RegionCode>(defaultRegionCode || allowedRegionCodes?.[0] || 'US');
-    const [phoneNumberInputValue, setPhoneNumberInputValue] = useState<string>('');
-
     // Value can be either string or object based on afterRead hook, so always extract E.164 string to avoid issues
     const e164Value = extractE164FromValue(value);
+
+    const determineInitialRegionCode = () => {
+        if (e164Value) {
+            const parsedPhoneNumber = parseE164ToNationalFormat(e164Value);
+            if (parsedPhoneNumber?.regionCode) {
+                return parsedPhoneNumber.regionCode;
+            }
+        }
+        return defaultRegionCode || allowedRegionCodes?.[0] || 'US';
+    };
+
+    const [regionCode, setRegionCode] = useState<RegionCode>(determineInitialRegionCode);
+    const [phoneNumberInputValue, setPhoneNumberInputValue] = useState<string>('');
 
     const filteredCountryOptions = useMemo(() => {
         const regions = allowedRegionCodes?.length ? allowedRegionCodes : countries.map((country) => country.regionCode);
