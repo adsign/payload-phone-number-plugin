@@ -23,4 +23,8 @@ export type Country = {
     regionCode: RegionCode;
 };
 
+export type Defaults = {
+    defaultCountry: RegionCode;
+};
+
 export type { RegionCode };
