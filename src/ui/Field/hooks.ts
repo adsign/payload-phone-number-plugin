@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { OptionObject } from 'payload';
 
 import type { PhoneNumberValue, RegionCode } from '../../types.js';
+import { defaults } from '../../defaults.js';
 import { extractE164FromValue, parseE164ToNationalFormat, formatToNationalAsYouType, convertToE164, parseInternationalNumber } from './helpers.js';
 
 import { countries } from '../../utilities/countries.js';
@@ -78,7 +79,7 @@ export function usePhoneNumberField({
                 return parsedPhoneNumber.regionCode;
             }
         }
-        return defaultRegionCode || allowedRegionCodes?.[0] || 'US';
+        return defaultRegionCode || allowedRegionCodes?.[0] || defaults.defaultCountry;
     };
 
     const [regionCode, setRegionCode] = useState<RegionCode>(determineInitialRegionCode);
