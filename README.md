@@ -1,21 +1,21 @@
 # Payload CMS Phone Number Plugin
 
 [![Payload CMS](https://img.shields.io/badge/Payload%20CMS-v3-blue)](https://github.com/payloadcms/payload)
+[![NPM Version](https://img.shields.io/npm/v/payload-phone-number-plugin)](https://www.npmjs.com/package/payload-phone-number-plugin)
 
 This Payload CMS plugin uses [google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to format and validate phone numbers.
 
 ![Preview](./src/assets/preview.png)
 
-> Admin Panel screenshot of the Phone Number field
-
 ## Features
-
-- Built with Payload UI components so it feels native to the Admin UI
-- As-you-type formatting
-- Validates server-side and client-side
-- Support for limiting to only some countries
+- Format phone numbers to multiple formats (E.164, national, international)
+- As-you-type formatting based on selected country
+- Validates phone numbers based on selected country
+- Support for limiting selection to only some countries
 - Support for setting a default country
-- Automatic formatting and region detection when pasting phone numbers
+- Automatic formatting and region detection when pasting international phone numbers
+- Full TypeScript support with generated phone number types
+- Built with Payload UI components so it feels native to the Admin Panel
 - i18n support for validation messages (PRs for new languages are welcome)
 
 ## Installation
@@ -89,7 +89,7 @@ phoneNumberField({
 ```ts
 phoneNumberField({
   name: 'phoneNumber',
-  label: 'Phone Phone',
+  label: 'Phone Number',
   defaultCountry: 'NO', // Norway will be pre-selected
   allowedCountries: ['NO', 'US', 'SE'], // Only these countries will be selectable
 })
@@ -107,9 +107,9 @@ phoneNumberField({
 })
 ```
 
-## Creating Records Programmatically
+## Creating Documents Programmatically
 
-When creating or updating records, pass the phone number as an E.164 string directly.
+When creating or updating documents, pass the phone number as an E.164 string directly. Phone numbers are stored in E.164 format in the database.
 
 The field will handle parsing and validation so it won't save unless it's a valid phone number for that field.
 
@@ -139,11 +139,11 @@ await fetch('http://localhost:3000/api/employees', {
 > [!NOTE]
 > You cannot pass a phone number object, only E.164 strings are accepted.
 
-## Querying Phone Numbers by Where
+## Querying by Phone Number
 
-When using `payload.find` or database queries, use the E.164 format since phone numbers are stored as E.164 strings:
+When using `payload.find` or database queries, use the E.164 format:
 
-```typescript
+```ts
 const employees = await payload.find({
   collection: 'employees',
   where: {
@@ -158,7 +158,7 @@ The same applies when using the REST API.
 
 ## TypeScript Types
 
-The plugin uses a union type pattern similar to Payload's relationship fields with depth. The field is typed as `string | PhoneNumber`.
+The field is typed as `string | PhoneNumber`, similar to Payload's relationship fields with depth.
 
 This is because phone numbers are stored as strings in the database but are transformed into objects when you read them using libphonenumber.
 
@@ -192,6 +192,6 @@ Example response:
 
 ## Additional Information
 
-A region code is a ISO 3166-1 alpha-2 code.
+A region code is an ISO 3166-1 alpha-2 code.
 
 List of all valid region codes can be found here: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements
