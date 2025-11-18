@@ -24,7 +24,14 @@ export type Country = {
 };
 
 export type Defaults = {
+    /**
+     * @default 'US'
+     */
     defaultCountry: RegionCode;
+    /**
+     * @default 'international'
+     */
+    cellDisplayFormat: CellDisplayFormat;
 };
 
 export type { RegionCode };

@@ -7,12 +7,13 @@ import { useTranslation } from '@payloadcms/ui';
 import type { FC } from 'react';
 
 import type { PhoneNumberValue, CellDisplayFormat } from '../../types.js';
+import { defaults } from '../../defaults.js';
 
 type PhoneNumberCellProps = DefaultCellComponentProps<TextFieldClient, PhoneNumberValue> & {
     cellDisplayFormat?: CellDisplayFormat;
 };
 
-export const PhoneNumberCellComponent: FC<PhoneNumberCellProps> = ({ cellData, cellDisplayFormat = 'international', field }) => {
+export const PhoneNumberCellComponent: FC<PhoneNumberCellProps> = ({ cellData, cellDisplayFormat = defaults.cellDisplayFormat, field }) => {
     const { i18n } = useTranslation();
 
     if (cellData && typeof cellData === 'object' && 'international' in cellData) {
