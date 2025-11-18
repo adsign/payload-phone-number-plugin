@@ -1,6 +1,6 @@
 {
   "name": "payload-phone-number-plugin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Phone Number Plugin for Payload CMS.",
   "license": "MIT",
   "type": "module",
