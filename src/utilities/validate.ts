@@ -1,6 +1,7 @@
 import type { TextField, Validate } from 'payload';
 
-import * as libphonenumber from 'google-libphonenumber';
+import libphonenumber from 'google-libphonenumber';
+const { PhoneNumberUtil } = libphonenumber;
 
 import type { RegionCode } from '../types.js';
 
@@ -9,7 +10,7 @@ let phoneUtil: libphonenumber.PhoneNumberUtil | null = null;
 export const createPhoneNumberValidator = (allowedCountries?: RegionCode[]): Validate<string, unknown, unknown, TextField> => {
     return (value, { req, required }) => {
         if (!phoneUtil) {
-            phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
+            phoneUtil = PhoneNumberUtil.getInstance();
         }
 
         if (!value) {

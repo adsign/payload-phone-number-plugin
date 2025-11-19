@@ -1,16 +1,15 @@
 import type { PhoneNumber } from '../types.js';
 
-import * as libphonenumber from 'google-libphonenumber';
+import libphonenumber from 'google-libphonenumber';
+const { PhoneNumberUtil, PhoneNumberFormat } = libphonenumber;
 
 import { countries } from './countries.js';
 
 let phoneUtil: libphonenumber.PhoneNumberUtil | null = null;
-let PNF: typeof libphonenumber.PhoneNumberFormat | null = null;
 
 export function getPhoneNumberDetails(e164PhoneNumber: string): PhoneNumber | null {
-    if (!phoneUtil || !PNF) {
-        phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
-        PNF = libphonenumber.PhoneNumberFormat;
+    if (!phoneUtil) {
+        phoneUtil = PhoneNumberUtil.getInstance();
     }
 
     try {
@@ -21,9 +20,9 @@ export function getPhoneNumberDetails(e164PhoneNumber: string): PhoneNumber | nu
             return null;
         }
 
-        const national = phoneUtil.format(number, PNF.NATIONAL);
-        const international = phoneUtil.format(number, PNF.INTERNATIONAL);
-        const e164Formatted = phoneUtil.format(number, PNF.E164);
+        const national = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
+        const international = phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL);
+        const e164Formatted = phoneUtil.format(number, PhoneNumberFormat.E164);
 
         const country = countries.find((c) => c.regionCode === regionCode);
         const callingCode = country?.callingCode || `+${number.getCountryCode()}`;
