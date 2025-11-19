@@ -1964,9 +1964,5 @@ const allCountries: Record<RegionCode, Country> = {
 };
 
 export const countries = Object.values(allCountries).sort((a, b) => {
-    const numA = Number(String(a.callingCode).replace('+', ''));
-    const numB = Number(String(b.callingCode).replace('+', ''));
-    if (numA !== numB) return numA - numB;
-
     return a.name.international.localeCompare(b.name.international);
 });

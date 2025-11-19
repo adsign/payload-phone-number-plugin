@@ -22,7 +22,7 @@ type PhoneNumberFieldProps = {
 } & TextFieldClientProps;
 
 const countryOptions: OptionObject[] = countries.map((country) => ({
-    label: `${country.emoji} ${country.callingCode} (${country.name.international})`,
+    label: `${country.name.international} (${country.callingCode})`,
     value: country.regionCode,
 }));
 
