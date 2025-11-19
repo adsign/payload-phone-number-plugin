@@ -133,4 +133,30 @@ describe('Phone Number Plugin integration tests', () => {
             regionCode: 'US',
         });
     });
+
+    test('returns raw phone number string when requested via context', async () => {
+        const phoneNumber = '+4745360001';
+
+        const employee = await payload.create({
+            collection: 'employees',
+            data: {
+                name: 'Test',
+                phoneNumber,
+            },
+        });
+
+        expect(employee.phoneNumber).toMatchObject({
+            e164: phoneNumber,
+        });
+
+        const employeeWithRawPhone = await payload.findByID({
+            collection: 'employees',
+            id: employee.id,
+            context: {
+                phoneNumberPluginReturnRawString: true,
+            },
+        });
+
+        expect(employeeWithRawPhone.phoneNumber).toBe(phoneNumber);
+    });
 });
