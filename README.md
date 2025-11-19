@@ -190,6 +190,32 @@ Example response:
 }
 ```
 
+## Get the raw phone number value
+
+If you need to access the raw phone number value you can use context when you query:
+
+```ts
+const employees = await payload.find({
+  collection: 'employees',
+  where: {
+    phoneNumber: {
+      equals: '+4712345678'
+    }
+  },
+  context: {
+    phoneNumberPluginReturnRawValue: true,
+  },
+})
+```
+
+Example response:
+
+```json
+{
+  "phoneNumber": "+4712345678"
+}
+```
+
 ## Additional Information
 
 A region code is an ISO 3166-1 alpha-2 code.
