@@ -43,8 +43,7 @@
     "test": "pnpm test:int && pnpm test:e2e",
     "test:e2e": "playwright test",
     "test:int": "vitest",
-    "test:ci": "pnpm test:int",
-    "release": "release-it"
+    "test:ci": "pnpm test:int"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -56,6 +55,7 @@
     "@payloadcms/richtext-lexical": "3.62.1",
     "@payloadcms/ui": "3.62.1",
     "@playwright/test": "^1.56.1",
+    "@release-it/conventional-changelog": "^10.0.2",
     "@swc-node/register": "1.10.9",
     "@swc/cli": "0.6.0",
     "@types/google-libphonenumber": "^7.4.30",
