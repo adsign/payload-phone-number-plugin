@@ -203,7 +203,7 @@ const employees = await payload.find({
     }
   },
   context: {
-    phoneNumberPluginReturnRawString: true,
+    phoneNumberPluginReturnRawValue: true,
   },
 })
 ```

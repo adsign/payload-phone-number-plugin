@@ -101,7 +101,7 @@ const phoneNumberField = <T extends RegionCode[] | undefined = undefined>({ requ
             ],
             afterRead: [
                 ({ value, context }) => {
-                    if (value && typeof value === 'string' && context['phoneNumberPluginReturnRawString'] !== true) {
+                    if (value && typeof value === 'string' && context['phoneNumberPluginReturnRawValue'] !== true) {
                         return getPhoneNumberDetails(value);
                     }
                     return value;

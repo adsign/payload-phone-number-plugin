@@ -153,7 +153,7 @@ describe('Phone Number Plugin integration tests', () => {
             collection: 'employees',
             id: employee.id,
             context: {
-                phoneNumberPluginReturnRawString: true,
+                phoneNumberPluginReturnRawValue: true,
             },
         });
 
