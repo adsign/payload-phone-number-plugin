@@ -68,13 +68,18 @@
         background: none;
         border: 0;
         border-right: 1px solid var(--theme-elevation-150);
-        padding: 0 12px;
+        padding: 0 14px;
         margin: 0;
         display: flex;
         align-items: center;
         cursor: pointer;
-        gap: 8px;
+        gap: 6px;
         white-space: nowrap;
+    }
+
+    .phone-number__show-flag-emoji-and-calling-code .phone-number__select-region-code-button {
+        padding: 0 12px;
+        gap: 8px;
     }
 
     .phone-number__input-field .field-type__wrap:hover .phone-number__select-region-code-button {
@@ -107,7 +112,7 @@
         flex-shrink: 0;
     }
 
-    .phone-number__calling-code-container {
+    .phone-number__country-prefix-container {
         display: flex;
         align-items: center;
         gap: 6px;

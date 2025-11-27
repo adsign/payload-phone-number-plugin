@@ -101,11 +101,15 @@ const buildConfigWithMemoryDB = async () => {
                         admin: {
                             description: 'This is a field description',
                             cellDisplayFormat: 'national',
+                            countryPrefixDisplayFormat: 'callingCode',
                         },
                     }),
                     phoneNumberField({
                         name: 'phoneNumberAnyCountry',
                         label: 'Phone Number (Any Country)',
+                        admin: {
+                            countryPrefixDisplayFormat: 'flagEmoji',
+                        },
                     }),
                     {
                         name: 'checkbox',

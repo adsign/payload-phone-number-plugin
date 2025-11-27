@@ -58,11 +58,12 @@ const Employees: CollectionConfig = {
 
 ## Field Props
 
-| Name                        | Type                                           | Required | Description                                                                                    | Default           |
-| --------------------------- | ---------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------- | ----------------- |
-| `defaultCountry`            | `RegionCode`                                   | `false`  | The default country region code for the field (ISO 3166-1 alpha-2)                             | `'US'`            |
-| `allowedCountries`          | `RegionCode[]`                                 | `false`  | Array of allowed country codes. If specified, restricts user selection to these countries only |                   |
-| `admin.cellDisplayFormat`   | `'e164'` \| `'national'` \| `'international'`  | `false`  | The format to display phone numbers in table cells                                             | `'international'` |
+| Name                              | Type                                                                     | Required | Description                                                                                    | Default                       |
+| --------------------------------- | ------------------------------------------------------------------------ | -------- | ---------------------------------------------------------------------------------------------- | ----------------------------- |
+| `defaultCountry`                  | `RegionCode`                                                             | `false`  | The default country region code for the field (ISO 3166-1 alpha-2)                             | `'US'`                        |
+| `allowedCountries`                | `RegionCode[]`                                                           | `false`  | Array of allowed country codes. If specified, restricts user selection to these countries only |                               |
+| `admin.cellDisplayFormat`         | `'e164'` \| `'national'` \| `'international'`                            | `false`  | The format to display phone numbers in table cells                                             | `'international'`             |
+| `admin.countryPrefixDisplayFormat`       | `'flagEmoji'` \| `'callingCode'` \| `'flagEmojiAndCallingCode'`          | `false`  | The format to display the country prefix next to the field input                               | `'flagEmojiAndCallingCode'`   |
 
 ### Example with Default Country
 
@@ -103,6 +104,18 @@ phoneNumberField({
   label: 'Phone Number',
   admin: {
     cellDisplayFormat: 'e164', // Display as +4712345678 in table cells
+  },
+})
+```
+
+### Example with Calling Code Display Format
+
+```ts
+phoneNumberField({
+  name: 'phoneNumber',
+  label: 'Phone Number',
+  admin: {
+    countryPrefixDisplayFormat: 'callingCode', // Display only +47 (no flag emoji)
   },
 })
 ```
