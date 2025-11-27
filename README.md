@@ -108,7 +108,7 @@ phoneNumberField({
 })
 ```
 
-### Example with Calling Code Display Format
+### Example with Country Prefix Display Format
 
 ```ts
 phoneNumberField({
