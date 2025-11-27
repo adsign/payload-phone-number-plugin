@@ -107,6 +107,10 @@ const buildConfigWithMemoryDB = async () => {
                     phoneNumberField({
                         name: 'phoneNumberAnyCountry',
                         label: 'Phone Number (Any Country)',
+                    }),
+                    phoneNumberField({
+                        name: 'phoneNumberAnyCountryWithFlagPrefix',
+                        label: 'Phone Number (With Flag Prefix)',
                         admin: {
                             countryPrefixDisplayFormat: 'flagEmoji',
                         },
