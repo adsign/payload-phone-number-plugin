@@ -14,6 +14,8 @@ export type PhoneNumber = {
 
 export type CellDisplayFormat = 'e164' | 'national' | 'international';
 
+export type CountryPrefixDisplayFormat = 'flagEmoji' | 'callingCode' | 'flagEmojiAndCallingCode';
+
 export type Country = {
     callingCode: `+${string}`;
     emoji: string;
@@ -32,6 +34,10 @@ export type Defaults = {
      * @default 'international'
      */
     cellDisplayFormat: CellDisplayFormat;
+    /**
+     * @default 'flagEmojiAndCallingCode'
+     */
+    countryPrefixDisplayFormat: CountryPrefixDisplayFormat;
 };
 
 export type { RegionCode };

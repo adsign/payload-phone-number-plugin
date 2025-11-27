@@ -5,7 +5,7 @@ import type { JSONSchema4 } from 'json-schema';
 import { createPhoneNumberValidator } from '../utilities/validate.js';
 import { getPhoneNumberDetails } from '../utilities/getPhoneNumberDetails.js';
 
-import type { RegionCode } from '../types.js';
+import type { RegionCode, CellDisplayFormat, CountryPrefixDisplayFormat } from '../types.js';
 
 type PhoneNumberField<T extends RegionCode[] | undefined = undefined> = Omit<TextField, 'type' | 'hasMany' | 'typescriptSchema' | 'maxRows' | 'minRows' | 'admin'> & {
     /**
@@ -42,7 +42,18 @@ type PhoneNumberField<T extends RegionCode[] | undefined = undefined> = Omit<Tex
          *
          * @default 'international'
          */
-        cellDisplayFormat?: 'e164' | 'national' | 'international';
+        cellDisplayFormat?: CellDisplayFormat;
+        /**
+         * The format to display the country prefix next to the field input
+         *
+         * Options:
+         * - `flagEmoji`: Display only the flag emoji (e.g., 🇳🇴)
+         * - `callingCode`: Display only the calling code (e.g., +47)
+         * - `flagEmojiAndCallingCode`: Display both flag emoji and calling code (e.g., 🇳🇴 +47)
+         *
+         * @default 'flagEmojiAndCallingCode'
+         */
+        countryPrefixDisplayFormat?: CountryPrefixDisplayFormat;
     };
 };
 
@@ -80,6 +91,7 @@ const phoneNumberField = <T extends RegionCode[] | undefined = undefined>({ requ
                     clientProps: {
                         defaultRegionCode: defaultCountry,
                         allowedRegionCodes: allowedCountries,
+                        countryPrefixDisplayFormat: admin?.countryPrefixDisplayFormat,
                     },
                 },
                 Cell: {
