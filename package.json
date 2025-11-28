@@ -58,7 +58,6 @@
     "@release-it/conventional-changelog": "^10.0.2",
     "@swc-node/register": "1.10.9",
     "@swc/cli": "0.6.0",
-    "@types/google-libphonenumber": "^7.4.30",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^22.19.0",
     "@types/react": "19.1.8",
@@ -120,6 +119,7 @@
   "registry": "https://registry.npmjs.org/",
   "dependencies": {
     "@payloadcms/translations": "^3.0.0",
+    "@types/google-libphonenumber": "^7.4.30",
     "clsx": "^2.1.1",
     "google-libphonenumber": "^3.2.43"
   }

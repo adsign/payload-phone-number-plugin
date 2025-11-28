@@ -11,6 +11,9 @@ importers:
       '@payloadcms/translations':
         specifier: ^3.0.0
         version: 3.62.1
+      '@types/google-libphonenumber':
+        specifier: ^7.4.30
+        version: 7.4.30
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -54,9 +57,6 @@ importers:
       '@swc/cli':
         specifier: 0.6.0
         version: 0.6.0(@swc/core@1.15.0)(chokidar@4.0.3)
-      '@types/google-libphonenumber':
-        specifier: ^7.4.30
-        version: 7.4.30
       '@types/json-schema':
         specifier: ^7.0.15
         version: 7.0.15
