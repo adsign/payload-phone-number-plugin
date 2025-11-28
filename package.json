@@ -58,7 +58,6 @@
     "@release-it/conventional-changelog": "^10.0.2",
     "@swc-node/register": "1.10.9",
     "@swc/cli": "0.6.0",
-    "@types/google-libphonenumber": "^7.4.30",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^22.19.0",
     "@types/react": "19.1.8",
@@ -88,7 +87,7 @@
     "vitest": "^3.2.4"
   },
   "peerDependencies": {
-    "payload": "^3.62.1"
+    "payload": "^3.0.0"
   },
   "engines": {
     "node": "^18.20.2 || >=20.9.0",
@@ -119,7 +118,8 @@
   },
   "registry": "https://registry.npmjs.org/",
   "dependencies": {
-    "@payloadcms/translations": "^3.62.1",
+    "@payloadcms/translations": "^3.0.0",
+    "@types/google-libphonenumber": "^7.4.30",
     "clsx": "^2.1.1",
     "google-libphonenumber": "^3.2.43"
   }
