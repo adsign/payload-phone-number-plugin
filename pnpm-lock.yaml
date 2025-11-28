@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@payloadcms/translations':
-        specifier: ^3.62.1
+        specifier: ^3.0.0
         version: 3.62.1
       clsx:
         specifier: ^2.1.1
@@ -613,6 +613,7 @@ packages:
 
   '@eslint-react/tools@1.16.1':
     resolution: {integrity: sha512-X/VbkpltsfLLM14SqAThFEEsvQOCopyFXRwnAJp6HU9SdZEy7CkqRdPz/EQl8w7SEl70/DVFI2kvx0FN8YP3bw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@eslint-react/types@1.16.1':
     resolution: {integrity: sha512-0vNdbVtebCtlGZBFWmZaYvXYhgakKrvQz1WYeSmEMKLSebIgReSrvjqVOhQOvoz41lGIuNYUKfYVSWwj41lyDg==}
