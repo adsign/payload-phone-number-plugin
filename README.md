@@ -3,7 +3,7 @@
 [![Payload CMS](https://img.shields.io/badge/Payload%20CMS-v3-blue)](https://github.com/payloadcms/payload)
 [![NPM Version](https://img.shields.io/npm/v/payload-phone-number-plugin)](https://www.npmjs.com/package/payload-phone-number-plugin)
 
-This Payload CMS plugin uses [google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to format and validate phone numbers.
+This Payload CMS plugin uses [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) to format and validate phone numbers.
 
 ![Preview](./src/assets/preview.png)
 

@@ -1,9 +1,6 @@
-import libphonenumber from 'google-libphonenumber';
-const { PhoneNumberUtil, PhoneNumberFormat, AsYouTypeFormatter } = libphonenumber;
+import { AsYouType, parsePhoneNumber } from 'libphonenumber-js/max';
 
 import type { PhoneNumberValue, RegionCode } from '../../types.js';
-
-const phoneUtil = PhoneNumberUtil.getInstance();
 
 export function extractE164FromValue(value: PhoneNumberValue) {
     return typeof value === 'object' && value !== null ? value.e164 : value || '';
@@ -11,9 +8,10 @@ export function extractE164FromValue(value: PhoneNumberValue) {
 
 export function parseE164ToNationalFormat(e164PhoneNumber: string): { regionCode: RegionCode | null; national: string } | null {
     try {
-        const number = phoneUtil.parse(e164PhoneNumber);
-        const regionCode = phoneUtil.getRegionCodeForNumber(number) || null;
-        const national = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
+        const phoneNumber = parsePhoneNumber(e164PhoneNumber);
+
+        const regionCode = phoneNumber.country || null;
+        const national = phoneNumber.formatNational();
 
         return { regionCode, national };
     } catch {
@@ -22,20 +20,18 @@ export function parseE164ToNationalFormat(e164PhoneNumber: string): { regionCode
 }
 
 export function formatToNationalAsYouType(input: string, regionCode: RegionCode) {
-    const formatter = new AsYouTypeFormatter(regionCode);
-    let nationalFormat = '';
-    for (const char of input.replace(/\D/g, '')) {
-        nationalFormat = formatter.inputDigit(char);
-    }
+    const formatter = new AsYouType(regionCode);
+    const nationalFormat = formatter.input(input.replace(/\D/g, ''));
 
     return nationalFormat;
 }
 
 export function convertToE164(nationalPhoneNumber: string, regionCode: RegionCode): { e164: string; detectedRegion: RegionCode | null } | null {
     try {
-        const number = phoneUtil.parseAndKeepRawInput(nationalPhoneNumber, regionCode);
-        const e164 = phoneUtil.format(number, PhoneNumberFormat.E164);
-        const detectedRegion = phoneUtil.getRegionCodeForNumber(number) || null;
+        const phoneNumber = parsePhoneNumber(nationalPhoneNumber, regionCode);
+
+        const e164 = phoneNumber.number;
+        const detectedRegion = phoneNumber.country || null;
 
         return { e164, detectedRegion };
     } catch {
@@ -52,9 +48,10 @@ export function extractDigitsWithPlus(input: string) {
 export function parseInternationalNumber(input: string): { regionCode: RegionCode | null; national: string } | null {
     try {
         const cleanInput = extractDigitsWithPlus(input);
-        const number = phoneUtil.parse(cleanInput);
-        const regionCode = phoneUtil.getRegionCodeForNumber(number) || null;
-        const national = phoneUtil.format(number, PhoneNumberFormat.NATIONAL);
+        const phoneNumber = parsePhoneNumber(cleanInput);
+
+        const regionCode = phoneNumber.country || null;
+        const national = phoneNumber.formatNational();
 
         return { regionCode, national };
     } catch {

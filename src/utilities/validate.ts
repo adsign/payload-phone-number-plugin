@@ -1,18 +1,11 @@
 import type { TextField, Validate } from 'payload';
 
-import libphonenumber from 'google-libphonenumber';
-const { PhoneNumberUtil } = libphonenumber;
+import { parsePhoneNumber } from 'libphonenumber-js/max';
 
 import type { RegionCode } from '../types.js';
 
-let phoneUtil: libphonenumber.PhoneNumberUtil | null = null;
-
 export const createPhoneNumberValidator = (allowedCountries?: RegionCode[]): Validate<string, unknown, unknown, TextField> => {
     return (value, { req, required }) => {
-        if (!phoneUtil) {
-            phoneUtil = PhoneNumberUtil.getInstance();
-        }
-
         if (!value) {
             if (required) {
                 return req.t('validation:required');
@@ -31,15 +24,15 @@ export const createPhoneNumberValidator = (allowedCountries?: RegionCode[]): Val
         }
 
         try {
-            const number = phoneUtil.parse(phoneNumberValue);
-            if (!phoneUtil.isValidNumber(number)) {
+            const phoneNumber = parsePhoneNumber(phoneNumberValue);
+            if (!phoneNumber.isValid()) {
                 // @ts-expect-error - translations are not typed in plugins yet
                 return req.t('payload-phone-number-plugin:invalidPhoneNumber');
             }
 
             if (allowedCountries && allowedCountries.length > 0) {
-                const regionCode = phoneUtil.getRegionCodeForNumber(number);
-                if (regionCode && !allowedCountries.includes(regionCode as RegionCode)) {
+                const regionCode = phoneNumber.country;
+                if (regionCode && !allowedCountries.includes(regionCode)) {
                     // @ts-expect-error - translations are not typed in plugins yet
                     return req.t('payload-phone-number-plugin:phoneNumberCountryNotAllowed');
                 }
