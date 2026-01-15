@@ -149,6 +149,15 @@
         flex-shrink: 0;
     }
 
+    .phone-number__select-region-code-button:disabled {
+        cursor: default;
+        color: var(--theme-elevation-400);
+
+        svg {
+            stroke: var(--theme-elevation-400);
+        }
+    }
+
     .phone-number__country-prefix-container {
         display: flex;
         align-items: center;

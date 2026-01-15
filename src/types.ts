@@ -1,4 +1,4 @@
-import type { RegionCode } from 'google-libphonenumber';
+import type { CountryCode } from 'libphonenumber-js';
 
 export type PhoneNumberPluginOptions = {};
 
@@ -40,4 +40,4 @@ export type Defaults = {
     countryPrefixDisplayFormat: CountryPrefixDisplayFormat;
 };
 
-export type { RegionCode };
+export type RegionCode = CountryCode;

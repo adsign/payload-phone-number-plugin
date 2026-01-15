@@ -36,6 +36,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
     countryPrefixDisplayFormat = defaults.countryPrefixDisplayFormat,
     field,
     path: pathFromProps,
+    readOnly,
 }) => {
     const { name, label, required, localized } = field;
     const locale = useLocale();
@@ -56,6 +57,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
 
     const path = pathFromProps ?? name;
     const { formInitializing, setValue, value, disabled, showError } = useField<PhoneNumberValue>({ path });
+    const isDisabled = readOnly || disabled || field.admin?.readOnly;
 
     const { regionCode, setRegionCode, setPhoneNumberInputValue, phoneNumberInputDisplayValue, filteredCountryOptions, currentCountry, hasOnlyOneRegionCode } = usePhoneNumberField({
         value,
@@ -108,6 +110,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                         ) : (
                             <button
                                 className="phone-number__select-region-code-button phone-number__select-region-code-button-with-dropdown"
+                                disabled={isDisabled}
                                 onFocus={() => setIsSelectOpen(true)}
                                 onMouseDown={(e) => {
                                     e.preventDefault();
@@ -125,7 +128,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                     label={label}
                     onChange={handleInputChange}
                     path={path}
-                    readOnly={formInitializing || disabled}
+                    readOnly={isDisabled || formInitializing}
                     required={required}
                     rtl={renderRTL}
                     showError={showError}
@@ -135,6 +138,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                     <div ref={selectContainerRef}>
                         <Select
                             className="phone-number__region-code-select"
+                            disabled={isDisabled}
                             isClearable={false}
                             isSearchable
                             menuIsOpen={isSelectOpen}
