@@ -119,8 +119,7 @@
   "registry": "https://registry.npmjs.org/",
   "dependencies": {
     "@payloadcms/translations": "^3.0.0",
-    "@types/google-libphonenumber": "^7.4.30",
     "clsx": "^2.1.1",
-    "google-libphonenumber": "^3.2.43"
+    "libphonenumber-js": "^1.12.33"
   }
 }
