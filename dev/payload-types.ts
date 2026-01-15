@@ -128,6 +128,8 @@ export interface Employee {
   phoneNumberNotRequired?: string | PhoneNumber | null;
   phoneNumberAnyCountry?: string | PhoneNumber | null;
   phoneNumberAnyCountryWithFlagPrefix?: string | PhoneNumber | null;
+  phoneNumberReadOnly?: string | PhoneNumber | null;
+  phoneNumberNoAccess?: string | PhoneNumber | null;
   checkbox?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -273,6 +275,8 @@ export interface EmployeesSelect<T extends boolean = true> {
   phoneNumberNotRequired?: T;
   phoneNumberAnyCountry?: T;
   phoneNumberAnyCountryWithFlagPrefix?: T;
+  phoneNumberReadOnly?: T;
+  phoneNumberNoAccess?: T;
   checkbox?: T;
   updatedAt?: T;
   createdAt?: T;

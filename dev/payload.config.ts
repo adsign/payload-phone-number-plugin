@@ -115,6 +115,20 @@ const buildConfigWithMemoryDB = async () => {
                             countryPrefixDisplayFormat: 'flagEmoji',
                         },
                     }),
+                    phoneNumberField({
+                        name: 'phoneNumberReadOnly',
+                        label: 'Phone Number (Read Only)',
+                        admin: {
+                            readOnly: true,
+                        },
+                    }),
+                    phoneNumberField({
+                        name: 'phoneNumberNoAccess',
+                        label: 'Phone Number (No Access)',
+                        access: {
+                            update: () => false,
+                        },
+                    }),
                     {
                         name: 'checkbox',
                         label: 'Checkbox in sidebar',
