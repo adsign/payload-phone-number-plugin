@@ -2,20 +2,19 @@
 
 import type { OptionObject, TextFieldClientProps } from 'payload';
 import { Select, TextInput, FieldDescription, useField, useConfig, useLocale } from '@payloadcms/ui';
+import { mergeFieldStyles } from '@payloadcms/ui/shared';
 
 import type { ChangeEvent, FC } from 'react';
 import { useMemo, useState } from 'react';
 
 import clsx from 'clsx';
 
-import { isFieldRTL } from '../../utilities/isFieldRTL.js';
-
 import type { PhoneNumberValue, RegionCode, CountryPrefixDisplayFormat } from '../../types.js';
 import { defaults } from '../../defaults.js';
 import { usePhoneNumberField, useSelectInputFocus, useHandlePhoneNumberPaste } from './hooks.js';
 
 import { countries } from '../../utilities/countries.js';
-import { mergeFieldStyles } from '../../utilities/mergeFieldStyles.js';
+import { isFieldRTL } from '../../utilities/isFieldRTL.js';
 
 import './index.scss';
 
