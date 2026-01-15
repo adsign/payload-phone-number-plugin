@@ -67,7 +67,6 @@
     .phone-number__select-region-code-button {
         background: none;
         border: 0;
-        border-right: 1px solid var(--theme-elevation-150);
         padding: 0 14px;
         margin: 0;
         display: flex;
@@ -75,6 +74,14 @@
         cursor: pointer;
         gap: 6px;
         white-space: nowrap;
+
+        [dir='ltr'] & {
+            border-right: 1px solid var(--theme-elevation-150);
+        }
+
+        [dir='rtl'] & {
+            border-left: 1px solid var(--theme-elevation-150);
+        }
     }
 
     .phone-number__show-flag-emoji-and-calling-code .phone-number__select-region-code-button {
@@ -83,27 +90,57 @@
     }
 
     .phone-number__input-field .field-type__wrap:hover .phone-number__select-region-code-button {
-        border-right-color: var(--theme-elevation-250);
+        [dir='ltr'] & {
+            border-right-color: var(--theme-elevation-250);
+        }
+
+        [dir='rtl'] & {
+            border-left-color: var(--theme-elevation-250);
+        }
     }
 
     .phone-number__input-field .field-type__wrap:focus,
     .phone-number__input-field .field-type__wrap:focus-within,
     .phone-number__input-field .field-type__wrap:active {
         .phone-number__select-region-code-button {
-            border-right-color: var(--theme-elevation-400);
+            [dir='ltr'] & {
+                border-right-color: var(--theme-elevation-400);
+            }
+
+            [dir='rtl'] & {
+                border-left-color: var(--theme-elevation-400);
+            }
         }
     }
 
     .phone-number__input-field.read-only .field-type__wrap:hover .phone-number__select-region-code-button {
-        border-right-color: var(--theme-elevation-150);
+        [dir='ltr'] & {
+            border-right-color: var(--theme-elevation-150);
+        }
+
+        [dir='rtl'] & {
+            border-left-color: var(--theme-elevation-150);
+        }
     }
 
     .phone-number__input-field.error .phone-number__select-region-code-button {
-        border-right-color: var(--theme-error-500);
+        [dir='ltr'] & {
+            border-right-color: var(--theme-error-500);
+        }
+
+        [dir='rtl'] & {
+            border-left-color: var(--theme-error-500);
+        }
     }
 
     html[data-theme='dark'] .phone-number__input-field.error .phone-number__select-region-code-button {
-        border-right-color: var(--theme-error-400);
+        [dir='ltr'] & {
+            border-right-color: var(--theme-error-400);
+        }
+
+        [dir='rtl'] & {
+            border-left-color: var(--theme-error-400);
+        }
     }
 
     .phone-number__select-region-code-button svg {

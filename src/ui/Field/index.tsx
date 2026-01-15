@@ -1,12 +1,14 @@
 'use client';
 
 import type { OptionObject, TextFieldClientProps } from 'payload';
-import { Select, TextInput, FieldDescription, useField } from '@payloadcms/ui';
+import { Select, TextInput, FieldDescription, useField, useConfig, useLocale } from '@payloadcms/ui';
 
 import type { ChangeEvent, FC } from 'react';
 import { useMemo, useState } from 'react';
 
 import clsx from 'clsx';
+
+import { isFieldRTL } from '../../utilities/isFieldRTL.js';
 
 import type { PhoneNumberValue, RegionCode, CountryPrefixDisplayFormat } from '../../types.js';
 import { defaults } from '../../defaults.js';
@@ -36,7 +38,18 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
     path: pathFromProps,
     readOnly,
 }) => {
-    const { name, label, required } = field;
+    const { name, label, required, localized } = field;
+    const locale = useLocale();
+    const {
+        config: { localization: localizationConfig },
+    } = useConfig();
+
+    const renderRTL = isFieldRTL({
+        fieldLocalized: localized,
+        fieldRTL: field.admin?.rtl,
+        locale,
+        localizationConfig: localizationConfig || undefined,
+    });
 
     const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
 
@@ -116,8 +129,9 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                     onChange={handleInputChange}
                     path={path}
                     readOnly={isDisabled || formInitializing}
-                    showError={showError}
                     required={required}
+                    rtl={renderRTL}
+                    showError={showError}
                     value={phoneNumberInputDisplayValue}
                 />
                 {!formInitializing && (
