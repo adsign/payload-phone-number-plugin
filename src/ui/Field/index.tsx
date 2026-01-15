@@ -145,6 +145,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                                 if (option && !Array.isArray(option)) {
                                     setRegionCode(option.value as RegionCode);
                                     setIsSelectOpen(false);
+                                    phoneInputContainerRef.current?.querySelector('input')?.focus();
                                 }
                             }}
                             onMenuClose={() => setIsSelectOpen(false)}
