@@ -68,6 +68,8 @@ export function usePhoneNumberField({
 }) {
     // Prevent re-initializing the phone input more than once
     const isInitializedRef = useRef<boolean>(false);
+    // Track if user has interacted with the field (to avoid marking form dirty on load)
+    const hasUserInteractedRef = useRef<boolean>(false);
 
     // Value can be either string or object based on afterRead hook, so always extract E.164 string to avoid issues
     const e164Value = extractE164FromValue(value);
@@ -82,8 +84,18 @@ export function usePhoneNumberField({
         return defaultRegionCode || allowedRegionCodes?.[0] || defaults.defaultCountry;
     };
 
-    const [regionCode, setRegionCode] = useState<RegionCode>(determineInitialRegionCode);
-    const [phoneNumberInputValue, setPhoneNumberInputValue] = useState<string>('');
+    const [regionCode, setRegionCodeInternal] = useState<RegionCode>(determineInitialRegionCode);
+    const [phoneNumberInputValue, setPhoneNumberInputValueInternal] = useState<string>('');
+
+    // Wrappers that track user interaction
+    const setRegionCode = (value: RegionCode) => {
+        hasUserInteractedRef.current = true;
+        setRegionCodeInternal(value);
+    };
+    const setPhoneNumberInputValue = (value: string) => {
+        hasUserInteractedRef.current = true;
+        setPhoneNumberInputValueInternal(value);
+    };
 
     const filteredCountryOptions = useMemo(() => {
         const regions = allowedRegionCodes?.length ? allowedRegionCodes : countries.map((country) => country.regionCode);
@@ -111,20 +123,23 @@ export function usePhoneNumberField({
     }, [nationalFormatInputAsYouType, e164Value]);
 
     // Initialize input value from E.164 value on first render to avoid client side jumps
+    // Uses internal setters to avoid marking as user interaction
     useEffect(() => {
         if (!isInitializedRef.current && e164Value && !phoneNumberInputValue) {
             const parsedPhoneNumber = parseE164ToNationalFormat(e164Value);
             if (parsedPhoneNumber?.regionCode) {
-                setRegionCode(parsedPhoneNumber.regionCode);
-                setPhoneNumberInputValue(parsedPhoneNumber.national);
+                setRegionCodeInternal(parsedPhoneNumber.regionCode);
+                setPhoneNumberInputValueInternal(parsedPhoneNumber.national);
             }
             isInitializedRef.current = true;
         }
-    }, [e164Value, phoneNumberInputValue, isInitializedRef, setRegionCode, setPhoneNumberInputValue]);
+    }, [e164Value, phoneNumberInputValue]);
 
     // Update E.164 value when phoneNumberInputValue or regionCode changes
+    // Only runs after user has interacted with the field to avoid marking form dirty on load
     useEffect(() => {
         if (formInitializing) return;
+        if (!hasUserInteractedRef.current) return;
 
         if (!phoneNumberInputValue.trim()) {
             if (e164Value !== '') setValue('');
@@ -134,7 +149,7 @@ export function usePhoneNumberField({
         const convertedPhoneNumber = convertToE164(nationalFormatInputAsYouType, regionCode);
         if (convertedPhoneNumber) {
             if (convertedPhoneNumber.detectedRegion && convertedPhoneNumber.detectedRegion !== regionCode) {
-                setRegionCode(convertedPhoneNumber.detectedRegion);
+                setRegionCodeInternal(convertedPhoneNumber.detectedRegion);
             }
             if (convertedPhoneNumber.e164 !== e164Value) {
                 setValue(convertedPhoneNumber.e164);
@@ -144,7 +159,7 @@ export function usePhoneNumberField({
                 setValue(phoneNumberInputValue);
             }
         }
-    }, [phoneNumberInputValue, e164Value, nationalFormatInputAsYouType, regionCode, formInitializing, setRegionCode, setValue]);
+    }, [phoneNumberInputValue, e164Value, nationalFormatInputAsYouType, regionCode, formInitializing, setValue]);
 
     return {
         regionCode,
