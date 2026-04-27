@@ -1,5 +1,5 @@
-import type { Payload } from 'payload';
-import { getPayload } from 'payload';
+import type { Field, Payload } from 'payload';
+import { getPayload, traverseFields } from 'payload';
 
 import config from './payload.config.js';
 
@@ -145,6 +145,22 @@ describe('Phone Number Plugin integration tests', () => {
                 },
             })
         ).rejects.toThrow();
+    });
+
+    test('applies plugin-level defaultCountry to fields that omit their own', async () => {
+        const employees = payload.config.collections.find((c) => c.slug === 'employees')!;
+        const clientPropsByName = new Map<string, Record<string, unknown> | undefined>();
+        traverseFields({
+            fields: employees.fields as Field[],
+            callback: ({ field }) => {
+                if (!('name' in field) || !field.name || !('type' in field) || field.type !== 'text') return;
+                const fieldComponent = field.admin?.components?.Field as { clientProps?: Record<string, unknown> } | undefined;
+                clientPropsByName.set(field.name, fieldComponent?.clientProps);
+            },
+        });
+
+        expect(clientPropsByName.get('phoneNumberAnyCountry')?.defaultRegionCode).toBe('NO');
+        expect(clientPropsByName.get('phoneNumberForUIScreenshotsWithMultiple')?.defaultRegionCode).toBe('US');
     });
 
     test('returns raw phone number string when requested via context', async () => {
