@@ -96,6 +96,9 @@ export interface Config {
     tasks: unknown;
     workflows: unknown;
   };
+  'phone-number-plugin': {
+    allowedCountry: 'NO' | 'SE' | 'DK' | 'US';
+  };
 }
 export interface UserAuthOperations {
   forgotPassword: {
