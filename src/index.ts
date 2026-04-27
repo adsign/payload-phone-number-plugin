@@ -10,18 +10,30 @@ import { translations } from './translations/index.js';
 import { PhoneNumber } from './json-schema.js';
 import { createPhoneNumberValidator } from './utilities/validate.js';
 
-const applyPluginAllowedCountries = (fields: Field[], pluginAllowedCountries: RegionCode[]): void => {
+type PhoneNumberFieldMarker = {
+    allowedCountries?: RegionCode[];
+    defaultCountry?: RegionCode;
+};
+
+const applyPluginDefaults = (fields: Field[], pluginAllowedCountries: RegionCode[] | undefined, pluginDefaultCountry: RegionCode | undefined): void => {
     traverseFields({
         fields,
         callback: ({ field }) => {
             if (!('type' in field) || field.type !== 'text') return;
-            const marker = field.custom?.['phone-number-plugin'] as { allowedCountries?: RegionCode[] } | undefined;
-            if (!marker || marker.allowedCountries !== undefined) return;
+            const marker = field.custom?.['phone-number-plugin'] as PhoneNumberFieldMarker | undefined;
+            if (!marker) return;
 
-            field.validate = createPhoneNumberValidator(pluginAllowedCountries);
             const fieldComponent = field.admin?.components?.Field as { clientProps?: Record<string, unknown> } | undefined;
-            if (fieldComponent) {
-                fieldComponent.clientProps = { ...fieldComponent.clientProps, allowedRegionCodes: pluginAllowedCountries };
+
+            if (marker.allowedCountries === undefined && pluginAllowedCountries && pluginAllowedCountries.length > 0) {
+                field.validate = createPhoneNumberValidator(pluginAllowedCountries);
+                if (fieldComponent) {
+                    fieldComponent.clientProps = { ...fieldComponent.clientProps, allowedRegionCodes: pluginAllowedCountries };
+                }
+            }
+
+            if (marker.defaultCountry === undefined && pluginDefaultCountry && fieldComponent) {
+                fieldComponent.clientProps = { ...fieldComponent.clientProps, defaultRegionCode: pluginDefaultCountry };
             }
         },
     });
@@ -31,11 +43,10 @@ const phoneNumberPlugin =
     (pluginOptions?: PhoneNumberPluginOptions): Plugin =>
     (incomingConfig: Config): Config => {
         const pluginAllowedCountries = pluginOptions?.allowedCountries;
+        const pluginDefaultCountry = pluginOptions?.defaultCountry;
 
-        if (pluginAllowedCountries && pluginAllowedCountries.length > 0) {
-            for (const collection of incomingConfig.collections ?? []) applyPluginAllowedCountries(collection.fields, pluginAllowedCountries);
-            for (const global of incomingConfig.globals ?? []) applyPluginAllowedCountries(global.fields, pluginAllowedCountries);
-        }
+        for (const collection of incomingConfig.collections ?? []) applyPluginDefaults(collection.fields, pluginAllowedCountries, pluginDefaultCountry);
+        for (const global of incomingConfig.globals ?? []) applyPluginDefaults(global.fields, pluginAllowedCountries, pluginDefaultCountry);
 
         const config: Config = {
             ...incomingConfig,

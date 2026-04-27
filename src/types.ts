@@ -12,6 +12,15 @@ export type PhoneNumberPluginOptions = {
      * @example ['US', 'NO', 'SE']
      */
     allowedCountries?: RegionCode[];
+    /**
+     * Project-wide default country. Each `phoneNumberField` that omits its own
+     * `defaultCountry` falls back to this.
+     *
+     * Expects an `ISO 3166-1 alpha-2` country code.
+     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+     * @example 'NO'
+     */
+    defaultCountry?: ConfiguredRegionCode;
 };
 
 export type ConfiguredRegionCode = GeneratedTypes extends { 'phone-number-plugin': { allowedCountry: infer C } } ? (C extends RegionCode ? C : RegionCode) : RegionCode;

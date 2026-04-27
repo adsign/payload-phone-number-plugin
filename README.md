@@ -58,19 +58,21 @@ const Employees: CollectionConfig = {
 
 ## Plugin Options
 
-| Name               | Type           | Required | Description                                                                                                  |
-| ------------------ | -------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
-| `allowedCountries` | `RegionCode[]` | `false`  | Restricts every `phoneNumberField` in the project to these country codes. Narrows field types after typegen. |
+| Name               | Type           | Required | Description                                                                                                                                       |
+| ------------------ | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allowedCountries` | `RegionCode[]` | `false`  | Restricts every `phoneNumberField` in the project to these country codes. Narrows field types after typegen.                                      |
+| `defaultCountry`   | `RegionCode`   | `false`  | Project-wide default country. Each `phoneNumberField` that omits its own `defaultCountry` falls back to this. Type-narrowed by `allowedCountries`. |
 
-### Example: project-wide allowed countries
+### Example: project-wide allowed countries and default
 
 ```ts
 phoneNumberPlugin({
   allowedCountries: ['NO', 'SE', 'DK', 'US'],
+  defaultCountry: 'NO',
 })
 ```
 
-After running `payload generate:types`, every `phoneNumberField` in the project will type-narrow `defaultCountry` and `allowedCountries` to this set — picking anything else is a TypeScript error.
+After running `payload generate:types`, every `phoneNumberField` in the project will type-narrow `defaultCountry` and `allowedCountries` to the configured set. Fields that don't set their own `defaultCountry` will pre-select the plugin-level one.
 
 ## Field Props
 
