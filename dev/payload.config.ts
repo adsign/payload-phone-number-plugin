@@ -152,6 +152,7 @@ const buildConfigWithMemoryDB = async () => {
         plugins: [
             phoneNumberPlugin({
                 allowedCountries: ['NO', 'SE', 'DK', 'US'],
+                defaultCountry: 'NO',
             }),
         ],
         secret: process.env.PAYLOAD_SECRET || 'test-secret_key',

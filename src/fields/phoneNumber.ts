@@ -84,7 +84,7 @@ const phoneNumberField = <T extends ConfiguredRegionCode[] | undefined = undefin
         required,
         custom: {
             ...props.custom,
-            'phone-number-plugin': { allowedCountries },
+            'phone-number-plugin': { allowedCountries, defaultCountry },
         },
         validate: createPhoneNumberValidator(allowedCountries),
         admin: {
