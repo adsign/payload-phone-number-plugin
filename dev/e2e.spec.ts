@@ -250,4 +250,43 @@ test.describe.serial('Phone Number Field E2E', () => {
         const internationalText = await internationalCell.textContent();
         expect(internationalText).toBe('+47 45 36 00 01');
     });
+
+    test('inherits plugin-level countryPrefixDisplayFormat when field omits its own', async () => {
+        await page.goto('/admin/collections/employees/create');
+        await page.waitForLoadState('networkidle');
+
+        const phoneInput = page.locator('#field-phoneNumberPluginConfig');
+        await expect(phoneInput).toBeVisible();
+
+        const phoneFieldContainer = phoneInput.locator('..');
+        const emojiElement = phoneFieldContainer.locator('.phone-number__emoji');
+        await expect(emojiElement).toBeVisible();
+
+        const countryPrefixElement = phoneFieldContainer.locator('.phone-number__country-prefix');
+        await expect(countryPrefixElement).toHaveCount(0);
+    });
+
+    test('inherits plugin-level cellDisplayFormat when field omits its own', async () => {
+        await page.goto('/admin/collections/employees/create');
+        await page.waitForLoadState('networkidle');
+
+        await page.waitForSelector('#field-name', { timeout: 10000 });
+        await page.fill('#field-name', 'Plugin Admin Inherits Test');
+        await page.fill('#field-phoneNumber', '+4745360001');
+        await page.fill('#field-phoneNumberPluginConfig', '+4745360001');
+
+        const saveButton = page.locator('#action-save');
+        await expect(saveButton).toBeVisible();
+        await saveButton.click();
+
+        await page.waitForURL(/\/admin\/collections\/employees\/.+/, { timeout: 5000 });
+
+        await page.goto('/admin/collections/employees');
+        await page.waitForLoadState('networkidle');
+
+        const firstRow = page.locator('tr.row-1');
+        const cell = firstRow.locator('td.cell-phoneNumberPluginConfig span');
+        await expect(cell).toBeVisible({ timeout: 10000 });
+        expect(await cell.textContent()).toBe('45 36 00 01');
+    });
 });
