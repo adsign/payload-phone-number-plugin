@@ -134,6 +134,19 @@ describe('Phone Number Plugin integration tests', () => {
         });
     });
 
+    test('rejects phone number from country outside plugin-level allowedCountries', async () => {
+        await expect(
+            payload.create({
+                collection: 'employees',
+                data: {
+                    name: 'Test',
+                    phoneNumber: '+4745360001',
+                    phoneNumberAnyCountry: '+4915123456789',
+                },
+            })
+        ).rejects.toThrow();
+    });
+
     test('returns raw phone number string when requested via context', async () => {
         const phoneNumber = '+4745360001';
 

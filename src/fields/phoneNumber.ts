@@ -5,9 +5,9 @@ import type { JSONSchema4 } from 'json-schema';
 import { createPhoneNumberValidator } from '../utilities/validate.js';
 import { getPhoneNumberDetails } from '../utilities/getPhoneNumberDetails.js';
 
-import type { RegionCode, CellDisplayFormat, CountryPrefixDisplayFormat } from '../types.js';
+import type { ConfiguredRegionCode, CellDisplayFormat, CountryPrefixDisplayFormat } from '../types.js';
 
-type PhoneNumberField<T extends RegionCode[] | undefined = undefined> = Omit<TextField, 'type' | 'hasMany' | 'typescriptSchema' | 'maxRows' | 'minRows' | 'admin'> & {
+type PhoneNumberField<T extends ConfiguredRegionCode[] | undefined = undefined> = Omit<TextField, 'type' | 'hasMany' | 'typescriptSchema' | 'maxRows' | 'minRows' | 'admin'> & {
     /**
      * The default country region code for the field
      *
@@ -17,7 +17,7 @@ type PhoneNumberField<T extends RegionCode[] | undefined = undefined> = Omit<Tex
      * @default 'US'
      * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
      */
-    defaultCountry?: T extends RegionCode[] ? T[number] : RegionCode;
+    defaultCountry?: T extends ConfiguredRegionCode[] ? T[number] : ConfiguredRegionCode;
     /**
      * Specifies the country region codes that the field will accept, restricting user selection to these countries.
      *
@@ -76,12 +76,16 @@ type PhoneNumberField<T extends RegionCode[] | undefined = undefined> = Omit<Tex
  * };
  * ```
  */
-const phoneNumberField = <T extends RegionCode[] | undefined = undefined>({ required, defaultCountry, allowedCountries, label, admin, ...props }: PhoneNumberField<T>): Field => {
+const phoneNumberField = <T extends ConfiguredRegionCode[] | undefined = undefined>({ required, defaultCountry, allowedCountries, label, admin, ...props }: PhoneNumberField<T>): Field => {
     const field: Field = {
         ...props,
         label,
         type: 'text',
         required,
+        custom: {
+            ...props.custom,
+            'phone-number-plugin': { allowedCountries },
+        },
         validate: createPhoneNumberValidator(allowedCountries),
         admin: {
             ...admin,

@@ -149,7 +149,11 @@ const buildConfigWithMemoryDB = async () => {
         onInit: async (payload) => {
             await seed(payload);
         },
-        plugins: [phoneNumberPlugin()],
+        plugins: [
+            phoneNumberPlugin({
+                allowedCountries: ['NO', 'SE', 'DK', 'US'],
+            }),
+        ],
         secret: process.env.PAYLOAD_SECRET || 'test-secret_key',
         i18n: {
             fallbackLanguage: 'en',
