@@ -1,6 +1,20 @@
+import type { GeneratedTypes } from 'payload';
 import type { CountryCode } from 'libphonenumber-js';
 
-export type PhoneNumberPluginOptions = {};
+export type PhoneNumberPluginOptions = {
+    /**
+     * Restricts every `phoneNumberField` in the project to these country region codes.
+     *
+     * If not used, fields will accept all country region codes.
+     *
+     * Expects an array of `ISO 3166-1 alpha-2` country codes.
+     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+     * @example ['US', 'NO', 'SE']
+     */
+    allowedCountries?: RegionCode[];
+};
+
+export type ConfiguredRegionCode = GeneratedTypes extends { 'phone-number-plugin': { allowedCountry: infer C } } ? (C extends RegionCode ? C : RegionCode) : RegionCode;
 
 export type PhoneNumberValue = string | PhoneNumber;
 

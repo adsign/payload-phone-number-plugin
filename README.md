@@ -11,7 +11,7 @@ This Payload CMS plugin uses [libphonenumber-js](https://www.npmjs.com/package/l
 - Format phone numbers to multiple formats (E.164, national, international)
 - As-you-type formatting based on selected country
 - Validates phone numbers based on selected country
-- Support for limiting selection to only some countries
+- Support for limiting selection to only some countries (per-field or project-wide)
 - Support for setting a default country
 - Automatic formatting and region detection when pasting international phone numbers
 - Full TypeScript support with generated phone number types
@@ -55,6 +55,22 @@ const Employees: CollectionConfig = {
 
 > [!NOTE]
 > Remember to update your importMap with `generate:importmap` since this plugin adds a custom component
+
+## Plugin Options
+
+| Name               | Type           | Required | Description                                                                                                  |
+| ------------------ | -------------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `allowedCountries` | `RegionCode[]` | `false`  | Restricts every `phoneNumberField` in the project to these country codes. Narrows field types after typegen. |
+
+### Example: project-wide allowed countries
+
+```ts
+phoneNumberPlugin({
+  allowedCountries: ['NO', 'SE', 'DK', 'US'],
+})
+```
+
+After running `payload generate:types`, every `phoneNumberField` in the project will type-narrow `defaultCountry` and `allowedCountries` to this set — picking anything else is a TypeScript error.
 
 ## Field Props
 
