@@ -14,6 +14,7 @@ type PhoneNumberField<T extends ConfiguredRegionCode[] | undefined = undefined> 
      * If `allowedCountries` is specified, `defaultCountry` must be one of the allowed countries.
      *
      * Expects a `ISO 3166-1 alpha-2` country code.
+     *
      * @default 'US'
      * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
      */
@@ -24,8 +25,9 @@ type PhoneNumberField<T extends ConfiguredRegionCode[] | undefined = undefined> 
      * If not used, the field will show all country region codes.
      *
      * Expects an array of `ISO 3166-1 alpha-2` country codes.
-     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+     *
      * @example ['US', 'NO', 'SE']
+     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
      */
     allowedCountries?: T;
     /**
@@ -84,7 +86,12 @@ const phoneNumberField = <T extends ConfiguredRegionCode[] | undefined = undefin
         required,
         custom: {
             ...props.custom,
-            'phone-number-plugin': { allowedCountries, defaultCountry },
+            'phone-number-plugin': {
+                allowedCountries,
+                defaultCountry,
+                cellDisplayFormat: admin?.cellDisplayFormat,
+                countryPrefixDisplayFormat: admin?.countryPrefixDisplayFormat,
+            },
         },
         validate: createPhoneNumberValidator(allowedCountries),
         admin: {

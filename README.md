@@ -12,7 +12,7 @@ This Payload CMS plugin uses [libphonenumber-js](https://www.npmjs.com/package/l
 - As-you-type formatting based on selected country
 - Validates phone numbers based on selected country
 - Support for limiting selection to only some countries (per-field or project-wide)
-- Support for setting a default country
+- Support for setting a default country (per-field or project-wide)
 - Automatic formatting and region detection when pasting international phone numbers
 - Full TypeScript support with generated phone number types
 - Built with Payload UI components so it feels native to the Admin Panel
@@ -58,10 +58,12 @@ const Employees: CollectionConfig = {
 
 ## Plugin Options
 
-| Name               | Type           | Required | Description                                                                                                                                       |
-| ------------------ | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `allowedCountries` | `RegionCode[]` | `false`  | Restricts every `phoneNumberField` in the project to these country codes. Narrows field types after typegen.                                      |
-| `defaultCountry`   | `RegionCode`   | `false`  | Project-wide default country. Each `phoneNumberField` that omits its own `defaultCountry` falls back to this. Type-narrowed by `allowedCountries`. |
+| Name                                 | Type                                                            | Required | Description                                                                                                                                       |
+| ------------------------------------ | --------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allowedCountries`                   | `RegionCode[]`                                                  | `false`  | Restricts every `phoneNumberField` in the project to these country codes. Individual fields can narrow further but cannot allow countries outside this list. |
+| `defaultCountry`                     | `RegionCode`                                                    | `false`  | Project-wide default country. Field-level `defaultCountry` overrides this. Type-narrowed by `allowedCountries`.                                   |
+| `admin.cellDisplayFormat`            | `'e164'` \| `'national'` \| `'international'`                   | `false`  | Project-wide default for `admin.cellDisplayFormat`. Field-level value overrides this.                                                             |
+| `admin.countryPrefixDisplayFormat`   | `'flagEmoji'` \| `'callingCode'` \| `'flagEmojiAndCallingCode'` | `false`  | Project-wide default for `admin.countryPrefixDisplayFormat`. Field-level value overrides this.                                                    |
 
 ### Example: project-wide allowed countries and default
 
@@ -72,7 +74,10 @@ phoneNumberPlugin({
 })
 ```
 
-After running `payload generate:types`, every `phoneNumberField` in the project will type-narrow `defaultCountry` and `allowedCountries` to the configured set. Fields that don't set their own `defaultCountry` will pre-select the plugin-level one.
+Field-level values override these defaults. `defaultCountry` and field-level `allowedCountries` are constrained to a subset of the plugin's `allowedCountries`.
+
+> [!NOTE]
+> Run `payload generate:types` for the type narrowing to take effect.
 
 ## Field Props
 

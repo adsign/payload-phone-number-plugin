@@ -8,19 +8,40 @@ export type PhoneNumberPluginOptions = {
      * If not used, fields will accept all country region codes.
      *
      * Expects an array of `ISO 3166-1 alpha-2` country codes.
-     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+     *
      * @example ['US', 'NO', 'SE']
+     * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
      */
     allowedCountries?: RegionCode[];
     /**
-     * Project-wide default country. Each `phoneNumberField` that omits its own
-     * `defaultCountry` falls back to this.
+     * Project-wide default country.
+     *
+     * Field-level `defaultCountry` overrides this.
      *
      * Expects an `ISO 3166-1 alpha-2` country code.
+     *
+     * @default 'US'
      * @see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-     * @example 'NO'
      */
     defaultCountry?: ConfiguredRegionCode;
+    admin?: {
+        /**
+         * Default for `admin.cellDisplayFormat`.
+         *
+         * Field-level value overrides this.
+         *
+         * @default 'international'
+         */
+        cellDisplayFormat?: CellDisplayFormat;
+        /**
+         * Default for `admin.countryPrefixDisplayFormat`.
+         *
+         * Field-level value overrides this.
+         *
+         * @default 'flagEmojiAndCallingCode'
+         */
+        countryPrefixDisplayFormat?: CountryPrefixDisplayFormat;
+    };
 };
 
 export type ConfiguredRegionCode = GeneratedTypes extends { 'phone-number-plugin': { allowedCountry: infer C } } ? (C extends RegionCode ? C : RegionCode) : RegionCode;

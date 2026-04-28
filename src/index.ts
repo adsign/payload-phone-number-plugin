@@ -3,7 +3,7 @@ import type { Config, Field, Plugin } from 'payload';
 import { deepMergeSimple } from 'payload/shared';
 import { traverseFields } from 'payload';
 
-import type { PhoneNumberPluginOptions, RegionCode } from './types.js';
+import type { CellDisplayFormat, CountryPrefixDisplayFormat, PhoneNumberPluginOptions, RegionCode } from './types.js';
 
 import { translations } from './translations/index.js';
 
@@ -13,9 +13,16 @@ import { createPhoneNumberValidator } from './utilities/validate.js';
 type PhoneNumberFieldMarker = {
     allowedCountries?: RegionCode[];
     defaultCountry?: RegionCode;
+    cellDisplayFormat?: CellDisplayFormat;
+    countryPrefixDisplayFormat?: CountryPrefixDisplayFormat;
 };
 
-const applyPluginDefaults = (fields: Field[], pluginAllowedCountries: RegionCode[] | undefined, pluginDefaultCountry: RegionCode | undefined): void => {
+const applyPluginDefaults = (fields: Field[], pluginOptions: PhoneNumberPluginOptions | undefined): void => {
+    const pluginAllowedCountries = pluginOptions?.allowedCountries;
+    const pluginDefaultCountry = pluginOptions?.defaultCountry;
+    const pluginCellFormat = pluginOptions?.admin?.cellDisplayFormat;
+    const pluginPrefixFormat = pluginOptions?.admin?.countryPrefixDisplayFormat;
+
     traverseFields({
         fields,
         callback: ({ field }) => {
@@ -24,6 +31,7 @@ const applyPluginDefaults = (fields: Field[], pluginAllowedCountries: RegionCode
             if (!marker) return;
 
             const fieldComponent = field.admin?.components?.Field as { clientProps?: Record<string, unknown> } | undefined;
+            const cellComponent = field.admin?.components?.Cell as { clientProps?: Record<string, unknown> } | undefined;
 
             if (marker.allowedCountries === undefined && pluginAllowedCountries && pluginAllowedCountries.length > 0) {
                 field.validate = createPhoneNumberValidator(pluginAllowedCountries);
@@ -35,18 +43,42 @@ const applyPluginDefaults = (fields: Field[], pluginAllowedCountries: RegionCode
             if (marker.defaultCountry === undefined && pluginDefaultCountry && fieldComponent) {
                 fieldComponent.clientProps = { ...fieldComponent.clientProps, defaultRegionCode: pluginDefaultCountry };
             }
+
+            if (marker.cellDisplayFormat === undefined && pluginCellFormat && cellComponent) {
+                cellComponent.clientProps = { ...cellComponent.clientProps, cellDisplayFormat: pluginCellFormat };
+            }
+
+            if (marker.countryPrefixDisplayFormat === undefined && pluginPrefixFormat && fieldComponent) {
+                fieldComponent.clientProps = { ...fieldComponent.clientProps, countryPrefixDisplayFormat: pluginPrefixFormat };
+            }
         },
     });
 };
 
+/**
+ * Phone Number Plugin for Payload CMS.
+ *
+ * See {@link PhoneNumberPluginOptions} for available options.
+ *
+ * @example
+ * ```ts
+ * import { phoneNumberPlugin } from 'payload-phone-number-plugin';
+ *
+ * export default buildConfig({
+ *   plugins: [
+ *     phoneNumberPlugin({
+ *       allowedCountries: ['NO', 'SE', 'DK', 'US'],
+ *       defaultCountry: 'NO',
+ *     }),
+ *   ],
+ * });
+ * ```
+ */
 const phoneNumberPlugin =
     (pluginOptions?: PhoneNumberPluginOptions): Plugin =>
     (incomingConfig: Config): Config => {
-        const pluginAllowedCountries = pluginOptions?.allowedCountries;
-        const pluginDefaultCountry = pluginOptions?.defaultCountry;
-
-        for (const collection of incomingConfig.collections ?? []) applyPluginDefaults(collection.fields, pluginAllowedCountries, pluginDefaultCountry);
-        for (const global of incomingConfig.globals ?? []) applyPluginDefaults(global.fields, pluginAllowedCountries, pluginDefaultCountry);
+        for (const collection of incomingConfig.collections ?? []) applyPluginDefaults(collection.fields, pluginOptions);
+        for (const global of incomingConfig.globals ?? []) applyPluginDefaults(global.fields, pluginOptions);
 
         const config: Config = {
             ...incomingConfig,
