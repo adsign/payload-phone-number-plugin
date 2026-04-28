@@ -41,6 +41,7 @@ const buildConfigWithMemoryDB = async () => {
             {
                 admin: {
                     useAsTitle: 'name',
+                    defaultColumns: ['name', 'phoneNumber', 'phoneNumberPluginConfig'],
                 },
                 slug: 'employees',
                 fields: [
@@ -90,6 +91,8 @@ const buildConfigWithMemoryDB = async () => {
                                 allowedCountries: ['NO'],
                                 admin: {
                                     width: '50%',
+                                    cellDisplayFormat: 'international',
+                                    countryPrefixDisplayFormat: 'flagEmojiAndCallingCode',
                                 },
                             }),
                         ],
@@ -107,6 +110,13 @@ const buildConfigWithMemoryDB = async () => {
                     phoneNumberField({
                         name: 'phoneNumberAnyCountry',
                         label: 'Phone Number (Any Country)',
+                        admin: {
+                            countryPrefixDisplayFormat: 'flagEmojiAndCallingCode',
+                        },
+                    }),
+                    phoneNumberField({
+                        name: 'phoneNumberPluginConfig',
+                        label: 'Phone Number (Plugin Config)',
                     }),
                     phoneNumberField({
                         name: 'phoneNumberAnyCountryWithFlagPrefix',
@@ -153,6 +163,10 @@ const buildConfigWithMemoryDB = async () => {
             phoneNumberPlugin({
                 allowedCountries: ['NO', 'SE', 'DK', 'US'],
                 defaultCountry: 'NO',
+                admin: {
+                    cellDisplayFormat: 'national',
+                    countryPrefixDisplayFormat: 'flagEmoji',
+                },
             }),
         ],
         secret: process.env.PAYLOAD_SECRET || 'test-secret_key',
