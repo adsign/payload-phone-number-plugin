@@ -1,0 +1,7 @@
+minimumReleaseAge: 0
+allowBuilds:
+  '@swc/core': false
+  esbuild: true
+  mongodb-memory-server: false
+  sharp: true
+  unrs-resolver: true

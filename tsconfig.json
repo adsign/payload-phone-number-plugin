@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": [
       "DOM",
       "DOM.Iterable",
@@ -15,6 +14,7 @@
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "jsx": "preserve",
     "incremental": true,
     "emitDeclarationOnly": true,
@@ -29,6 +29,5 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
-    "./dev/next-env.d.ts",
   ],
 }
