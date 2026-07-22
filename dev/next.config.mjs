@@ -25,6 +25,11 @@ const nextConfig = {
     },
     serverExternalPackages: ['mongodb-memory-server'],
     devIndicators: false,
+    // Temporarily required when developing on Windows until Next.js fixes Turbopack Sass resolution.
+    // See: https://github.com/vercel/next.js/issues/86431
+    sassOptions: {
+        loadPaths: ['./node_modules/@payloadcms/ui/dist/scss/'],
+    },
 };
 
 export default withPayload(nextConfig, { devBundleServerPackages: false });
