@@ -86,12 +86,14 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
+  fallbackLocale: null;
   globals: {};
   globalsSelect: {};
   locale: null;
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -130,6 +132,7 @@ export interface Employee {
   phoneNumber: string | PhoneNumber;
   phoneNumberNotRequired?: string | PhoneNumber | null;
   phoneNumberAnyCountry?: string | PhoneNumber | null;
+  phoneNumberPluginConfig?: string | PhoneNumber | null;
   phoneNumberAnyCountryWithFlagPrefix?: string | PhoneNumber | null;
   phoneNumberReadOnly?: string | PhoneNumber | null;
   phoneNumberNoAccess?: string | PhoneNumber | null;
@@ -208,6 +211,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -277,6 +281,7 @@ export interface EmployeesSelect<T extends boolean = true> {
   phoneNumber?: T;
   phoneNumberNotRequired?: T;
   phoneNumberAnyCountry?: T;
+  phoneNumberPluginConfig?: T;
   phoneNumberAnyCountryWithFlagPrefix?: T;
   phoneNumberReadOnly?: T;
   phoneNumberNoAccess?: T;
@@ -345,6 +350,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
