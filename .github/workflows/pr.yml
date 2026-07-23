@@ -1,0 +1,107 @@
+name: PR
+
+on:
+    pull_request_target:
+        types: [opened, edited, reopened, synchronize]
+
+permissions:
+    contents: read
+    pull-requests: write
+
+concurrency:
+    group: pr-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
+jobs:
+    checks:
+        name: Checks
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/github-script@v7
+              with:
+                  script: |
+                      const pr = context.payload.pull_request;
+                      const { owner, repo } = context.repo;
+
+                      const comments = await github.paginate(github.rest.issues.listComments, {
+                          owner,
+                          repo,
+                          issue_number: pr.number,
+                          per_page: 100,
+                      });
+
+                      // Sticky comment keyed by a hidden marker. A falsy body removes it.
+                      const upsert = async (marker, body) => {
+                          const existing = comments.find((comment) => comment.body.includes(marker));
+                          if (body) {
+                              const full = `${marker}\n${body}`;
+                              if (existing) await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body: full });
+                              else await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body: full });
+                          } else if (existing) {
+                              await github.rest.issues.deleteComment({ owner, repo, comment_id: existing.id });
+                          }
+                      };
+
+                      // The title must be a valid Conventional Commit type; the scope is optional.
+                      const configFile = await github.rest.repos.getContent({ owner, repo, path: '.github/pr-title.json', ref: pr.base.ref });
+                      const config = JSON.parse(Buffer.from(configFile.data.content, 'base64').toString('utf8'));
+
+                      const match = pr.title.match(/^(\w+)(?:\(([a-z0-9-]+)\))?(!)?: .+/);
+                      let titleProblem = null;
+                      if (!match) {
+                          titleProblem = 'Use the format `type: summary` (scope optional: `type(scope): summary`).';
+                      } else if (!config.types.includes(match[1])) {
+                          titleProblem = `\`${match[1]}\` is not a valid type. Use one of: ${config.types.join(', ')}.`;
+                      }
+
+                      await upsert(
+                          '<!-- pr-title-check -->',
+                          titleProblem &&
+                              [
+                                  '### PR title needs a fix',
+                                  '',
+                                  titleProblem,
+                                  '',
+                                  `**Valid types:** ${config.types.map((type) => '`' + type + '`').join(', ')}`,
+                                  '',
+                                  'Example: `fix: handle empty phone number input`',
+                              ].join('\n'),
+                      );
+
+                      // Flag any commit that credits an AI tool via a Co-Authored-By trailer.
+                      const commits = await github.paginate(github.rest.pulls.listCommits, {
+                          owner,
+                          repo,
+                          pull_number: pr.number,
+                          per_page: 100,
+                      });
+                      const aiNames = /(claude|copilot|cursor|chatgpt|openai|anthropic|gpt-?\d|gemini|bard|codeium|devin|aider|cody|tabnine|sourcegraph|amazon q)/i;
+                      const flagged = [];
+                      for (const commit of commits) {
+                          const lines = commit.commit.message.split('\n');
+                          const authors = lines
+                              .map((line) => line.match(/co-authored-by:\s*(.+)/i))
+                              .filter((found) => found && aiNames.test(found[1]))
+                              .map((found) => found[1].trim());
+                          if (authors.length) flagged.push({ sha: commit.sha, subject: lines[0], authors });
+                      }
+
+                      const contributing = `${context.serverUrl}/${owner}/${repo}/blob/main/CONTRIBUTING.md`;
+                      await upsert(
+                          '<!-- ai-coauthor-check -->',
+                          flagged.length &&
+                              [
+                                  '### AI Co-Author Detected',
+                                  '',
+                                  'The following commits list an AI tool as a co-author:',
+                                  '',
+                                  flagged
+                                      .map((commit) => `- \`${commit.sha.slice(0, 7)}\` ${commit.subject} (${commit.authors.join(', ')})`)
+                                      .join('\n'),
+                                  '',
+                                  `This project does not credit AI agents as authors (see [CONTRIBUTING](${contributing})). AI is a tool, not an author. Please remove the \`Co-Authored-By\` trailer and force-push.`,
+                              ].join('\n'),
+                      );
+
+                      if (titleProblem) core.setFailed(titleProblem);
+                      if (flagged.length) core.setFailed('A commit lists an AI tool as a co-author. Remove the Co-Authored-By trailer and force-push.');
