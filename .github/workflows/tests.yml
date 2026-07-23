@@ -1,12 +1,12 @@
-name: Build
+name: Tests
 on:
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
-    name: Build
+  check:
+    name: Lint, Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,8 +21,12 @@ jobs:
         run: pnpm install
       - name: Lint
         run: pnpm lint --max-warnings=0
-      - name: Build
+      - name: Type check
+        run: pnpm typecheck
+      - name: Build Plugin
         run: pnpm build
+      - name: Build demo
+        run: pnpm build:demo
       - name: Integration tests
         run: pnpm test:int
       - name: Install Playwright browsers
