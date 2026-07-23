@@ -1,4 +1,4 @@
-import { expect, test, Page } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 test.describe.serial('Phone Number Field E2E', () => {
     let page: Page;

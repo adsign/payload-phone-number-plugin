@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
+    "build:demo": "next build dev",
     "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
     "build:types": "tsc --outDir dist --rootDir ./src",
     "clean": "rimraf {dist,*.tsbuildinfo}",
@@ -43,7 +44,8 @@
     "test": "pnpm test:int && pnpm test:e2e",
     "test:e2e": "playwright test",
     "test:int": "vitest",
-    "test:ci": "pnpm test:int"
+    "test:ci": "pnpm test:int",
+    "typecheck": "tsc -p dev/tsconfig.json"
   },
   "devDependencies": {
     "@payloadcms/db-mongodb": "3.86.0",
