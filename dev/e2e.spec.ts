@@ -39,7 +39,7 @@ test.describe.serial('Phone Number Field E2E', () => {
 
         await page.waitForSelector('#field-name', { timeout: 10000 });
         await page.fill('#field-name', 'Valid Employee');
-        await page.fill('#field-phoneNumber', '+4745360001');
+        await page.fill('#field-phoneNumber', '+4740612345');
 
         const saveButton = page.locator('#action-save');
         await expect(saveButton).toBeVisible();
@@ -101,7 +101,7 @@ test.describe.serial('Phone Number Field E2E', () => {
                     bubbles: true,
                     cancelable: true,
                 });
-                pasteEvent.clipboardData?.setData('text/plain', '+4745360001');
+                pasteEvent.clipboardData?.setData('text/plain', '+4740612345');
                 input.dispatchEvent(pasteEvent);
             }
         });
@@ -109,7 +109,7 @@ test.describe.serial('Phone Number Field E2E', () => {
         await page.waitForTimeout(1000);
 
         const finalValue = await phoneInput.inputValue();
-        expect(finalValue).toBe('45 36 00 01');
+        expect(finalValue).toBe('40 61 23 45');
 
         const countryPrefixElement = phoneFieldContainer.locator('.phone-number__country-prefix');
         const countryPrefix = await countryPrefixElement.textContent();
@@ -156,7 +156,7 @@ test.describe.serial('Phone Number Field E2E', () => {
                     bubbles: true,
                     cancelable: true,
                 });
-                pasteEvent.clipboardData?.setData('text/plain', '+4745360001');
+                pasteEvent.clipboardData?.setData('text/plain', '+4740612345');
                 input.dispatchEvent(pasteEvent);
             }
         });
@@ -164,7 +164,7 @@ test.describe.serial('Phone Number Field E2E', () => {
         await page.waitForTimeout(1000);
 
         const finalValue = await phoneInput.inputValue();
-        expect(finalValue).toBe('45 36 00 01');
+        expect(finalValue).toBe('40 61 23 45');
 
         const emojiElement = phoneFieldContainer.locator('.phone-number__emoji');
         const emoji = await emojiElement.textContent();
@@ -173,7 +173,7 @@ test.describe.serial('Phone Number Field E2E', () => {
         const countryPrefixElement = phoneFieldContainer.locator('.phone-number__country-prefix');
         await expect(countryPrefixElement).toHaveCount(0);
 
-        await page.fill('#field-phoneNumber', '+4745360001');
+        await page.fill('#field-phoneNumber', '+4740612345');
 
         const saveButton = page.locator('#action-save');
         await expect(saveButton).toBeVisible();
@@ -230,8 +230,8 @@ test.describe.serial('Phone Number Field E2E', () => {
 
         await page.waitForSelector('#field-name', { timeout: 10000 });
         await page.fill('#field-name', 'Cell Display Test');
-        await page.fill('#field-phoneNumber', '+4745360001');
-        await page.fill('#field-phoneNumberNotRequired', '+4745360001');
+        await page.fill('#field-phoneNumber', '+4740612345');
+        await page.fill('#field-phoneNumberNotRequired', '+4740612345');
 
         const saveButton = page.locator('#action-save');
         await expect(saveButton).toBeVisible();
@@ -248,7 +248,7 @@ test.describe.serial('Phone Number Field E2E', () => {
         await expect(internationalCell).toBeVisible({ timeout: 10000 });
 
         const internationalText = await internationalCell.textContent();
-        expect(internationalText).toBe('+47 45 36 00 01');
+        expect(internationalText).toBe('+47 40 61 23 45');
     });
 
     test('inherits plugin-level countryPrefixDisplayFormat when field omits its own', async () => {
@@ -272,8 +272,8 @@ test.describe.serial('Phone Number Field E2E', () => {
 
         await page.waitForSelector('#field-name', { timeout: 10000 });
         await page.fill('#field-name', 'Plugin Admin Inherits Test');
-        await page.fill('#field-phoneNumber', '+4745360001');
-        await page.fill('#field-phoneNumberPluginConfig', '+4745360001');
+        await page.fill('#field-phoneNumber', '+4740612345');
+        await page.fill('#field-phoneNumberPluginConfig', '+4740612345');
 
         const saveButton = page.locator('#action-save');
         await expect(saveButton).toBeVisible();
@@ -287,6 +287,6 @@ test.describe.serial('Phone Number Field E2E', () => {
         const firstRow = page.locator('tr.row-1');
         const cell = firstRow.locator('td.cell-phoneNumberPluginConfig span');
         await expect(cell).toBeVisible({ timeout: 10000 });
-        expect(await cell.textContent()).toBe('45 36 00 01');
+        expect(await cell.textContent()).toBe('40 61 23 45');
     });
 });
