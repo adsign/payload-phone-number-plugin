@@ -48,43 +48,43 @@
     "typecheck": "tsc -p dev/tsconfig.json"
   },
   "devDependencies": {
-    "@payloadcms/db-mongodb": "3.86.0",
-    "@payloadcms/db-postgres": "3.86.0",
-    "@payloadcms/db-sqlite": "3.86.0",
-    "@payloadcms/next": "3.86.0",
-    "@payloadcms/richtext-lexical": "3.86.0",
-    "@payloadcms/ui": "3.86.0",
-    "@playwright/test": "^1.61.1",
-    "@release-it/conventional-changelog": "^11.0.1",
+    "@payloadcms/db-mongodb": "3.88.0",
+    "@payloadcms/db-postgres": "3.88.0",
+    "@payloadcms/db-sqlite": "3.88.0",
+    "@payloadcms/next": "3.88.0",
+    "@payloadcms/richtext-lexical": "3.88.0",
+    "@payloadcms/ui": "3.88.0",
+    "@playwright/test": "^1.62.1",
+    "@release-it/conventional-changelog": "^12.0.0",
     "@swc-node/register": "1.12.1",
     "@swc/cli": "0.8.1",
     "@types/json-schema": "^7.0.15",
-    "@types/node": "^26.1.1",
-    "@types/react": "19.2.17",
-    "@types/react-dom": "19.2.3",
+    "@types/node": "^26.4.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
     "copyfiles": "2.4.1",
     "cross-env": "^10.1.0",
-    "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.11",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "graphql": "^17.0.2",
     "json-schema": "^0.4.0",
     "mongodb-memory-server": "11.2.0",
-    "next": "16.2.11",
-    "open": "^11.0.0",
-    "payload": "3.86.0",
+    "next": "16.3.3",
+    "open": "^11.0.1",
+    "payload": "3.88.0",
     "prettier": "^3.9.6",
     "qs-esm": "8.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "release-it": "^20.2.1",
+    "release-it": "^21.0.2",
     "release-it-pnpm": "^4.6.6",
     "rimraf": "6.1.3",
-    "sharp": "0.35.3",
+    "sharp": "0.35.4",
     "sort-package-json": "^4.0.0",
     "typescript": "6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "peerDependencies": {
     "payload": "^3.0.0"
@@ -93,7 +93,7 @@
     "node": "^18.20.2 || >=20.9.0",
     "pnpm": "^9 || ^10 || ^11"
   },
-  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8",
+  "packageManager": "pnpm@11.22.0+sha512.1ff870c4c6133dfd88fb2afc46dd13d47f09c9794b438c6fdb47ca98caf3bc16381ee0be93a091b8e3824cf01f889f46d7d9e20910fb0be1ab0fb5baa80dd621",
   "publishConfig": {
     "exports": {
       ".": {
@@ -114,6 +114,6 @@
   "dependencies": {
     "@payloadcms/translations": "^3.0.0",
     "clsx": "^2.1.1",
-    "libphonenumber-js": "^1.13.9"
+    "libphonenumber-js": "^1.13.12"
   }
 }
