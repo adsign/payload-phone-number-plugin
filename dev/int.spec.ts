@@ -21,17 +21,17 @@ describe('Phone Number Plugin integration tests', () => {
             collection: 'employees',
             data: {
                 name: 'Test',
-                phoneNumber: '+4745360001',
+                phoneNumber: '+4740612345',
             },
         });
 
         expect(employee.name).toBe('Test');
         expect(employee.phoneNumber).toEqual({
-            e164: '+4745360001',
+            e164: '+4740612345',
             regionCode: 'NO',
             callingCode: '+47',
-            national: '45 36 00 01',
-            international: '+47 45 36 00 01',
+            national: '40 61 23 45',
+            international: '+47 40 61 23 45',
         });
     });
 
@@ -52,7 +52,7 @@ describe('Phone Number Plugin integration tests', () => {
             collection: 'employees',
             data: {
                 name: 'Test',
-                phoneNumber: '+4745360001',
+                phoneNumber: '+4740612345',
                 phoneNumberNotRequired: null,
             },
         });
@@ -78,13 +78,13 @@ describe('Phone Number Plugin integration tests', () => {
             collection: 'employees',
             data: {
                 name: 'Test',
-                phoneNumber: '+4745360001',
-                phoneNumberAnyCountry: '+4745360001',
+                phoneNumber: '+4740612345',
+                phoneNumberAnyCountry: '+4740612345',
             },
         });
 
         expect(employee.phoneNumberAnyCountry).toMatchObject({
-            e164: '+4745360001',
+            e164: '+4740612345',
             regionCode: 'NO',
         });
 
@@ -107,7 +107,7 @@ describe('Phone Number Plugin integration tests', () => {
             collection: 'employees',
             data: {
                 name: 'Test',
-                phoneNumber: '+4745360001',
+                phoneNumber: '+4740612345',
                 phoneNumberNotRequired: '+16505553434',
             },
         });
@@ -123,7 +123,7 @@ describe('Phone Number Plugin integration tests', () => {
             collection: 'employees',
             data: {
                 name: 'Test',
-                phoneNumber: '+4745360001',
+                phoneNumber: '+4740612345',
                 phoneNumberAnyCountry: '+16505553434',
             },
         });
@@ -140,7 +140,7 @@ describe('Phone Number Plugin integration tests', () => {
                 collection: 'employees',
                 data: {
                     name: 'Test',
-                    phoneNumber: '+4745360001',
+                    phoneNumber: '+4740612345',
                     phoneNumberAnyCountry: '+4915123456789',
                 },
             })
@@ -164,7 +164,7 @@ describe('Phone Number Plugin integration tests', () => {
     });
 
     test('returns raw phone number string when requested via context', async () => {
-        const phoneNumber = '+4745360001';
+        const phoneNumber = '+4740612345';
 
         const employee = await payload.create({
             collection: 'employees',

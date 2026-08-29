@@ -22,7 +22,7 @@ export const seed = async (payload: Payload) => {
     const employeeName = 'John Doe';
 
     // test number
-    const phoneNumber = '+4745360001';
+    const phoneNumber = '+4740612345';
 
     const { totalDocs: totalEmployees } = await payload.count({
         collection: 'employees',
