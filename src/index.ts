@@ -91,8 +91,8 @@ const phoneNumberPlugin =
                 schema: [
                     ...(incomingConfig.typescript?.schema || []),
                     ({ jsonSchema }) => {
-                        jsonSchema.definitions = {
-                            ...jsonSchema.definitions,
+                        jsonSchema.$defs = {
+                            ...jsonSchema.$defs,
                             PhoneNumber,
                         };
 

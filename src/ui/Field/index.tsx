@@ -1,7 +1,7 @@
 'use client';
 
 import type { OptionObject, TextFieldClientProps } from 'payload';
-import { Select, TextInput, FieldDescription, useField, useConfig, useLocale } from '@payloadcms/ui';
+import { ChevronIcon, Select, TextInput, FieldDescription, useField, useConfig, useLocale } from '@payloadcms/ui';
 import { mergeFieldStyles } from '@payloadcms/ui/shared';
 
 import type { ChangeEvent, FC } from 'react';
@@ -16,7 +16,7 @@ import { usePhoneNumberField, useSelectInputFocus, useHandlePhoneNumberPaste } f
 import { countries } from '../../utilities/countries.js';
 import { isFieldRTL } from '../../utilities/isFieldRTL.js';
 
-import './index.scss';
+import './index.css';
 
 type PhoneNumberFieldProps = {
     allowedRegionCodes?: RegionCode[];
@@ -28,6 +28,13 @@ const countryOptions: OptionObject[] = countries.map((country) => ({
     label: `${country.name.international} (${country.callingCode})`,
     value: country.regionCode,
 }));
+
+/**
+ * Opens the country menu with the current country focused. Payload's `Select` forwards this to react-select but doesn't type it.
+ */
+const focusSelectedCountryOnOpen = {
+    openMenuOnFocus: true,
+};
 
 export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
     allowedRegionCodes,
@@ -117,9 +124,7 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                                 }}
                                 type="button">
                                 <div className="phone-number__country-prefix-container">{countryPrefix()}</div>
-                                <svg height="8" viewBox="0 0 12 8" width="12" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11 1.48438L5.99958 6.77894L0.999163 1.48437" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.75" strokeWidth="1.8" />
-                                </svg>
+                                <ChevronIcon size={16} />
                             </button>
                         )
                     }
@@ -136,11 +141,13 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                 {!formInitializing && (
                     <div ref={selectContainerRef}>
                         <Select
+                            {...focusSelectedCountryOnOpen}
                             className="phone-number__region-code-select"
                             disabled={isDisabled}
                             isClearable={false}
                             isSearchable
                             menuIsOpen={isSelectOpen}
+                            menuPortalTarget={null}
                             onChange={(option) => {
                                 if (option && !Array.isArray(option)) {
                                     setRegionCode(option.value as RegionCode);
@@ -151,6 +158,12 @@ export const PhoneNumberFieldComponent: FC<PhoneNumberFieldProps> = ({
                             onMenuClose={() => setIsSelectOpen(false)}
                             onMenuOpen={() => setIsSelectOpen(true)}
                             options={filteredCountryOptions}
+                            styles={{
+                                menu: (base) => ({
+                                    ...base,
+                                    position: 'static',
+                                }),
+                            }}
                             value={filteredCountryOptions.find((option) => option.value === regionCode)}
                         />
                     </div>

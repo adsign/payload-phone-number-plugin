@@ -6,7 +6,6 @@ import { buildConfig } from 'payload';
 import { en } from 'payload/i18n/en';
 import { nb } from 'payload/i18n/nb';
 import { phoneNumberPlugin, phoneNumberField } from 'payload-phone-number-plugin';
-import sharp from 'sharp';
 import { fileURLToPath } from 'url';
 
 import { testEmailAdapter } from './helpers/testEmailAdapter.js';
@@ -23,7 +22,7 @@ const buildConfigWithMemoryDB = async () => {
     if (process.env.NODE_ENV === 'test' || process.env.USE_MEMORY_DB === 'true') {
         const memoryDB = await MongoMemoryReplSet.create({
             replSet: {
-                count: 3,
+                count: 1,
                 dbName: 'payloadmemory',
             },
         });
@@ -174,7 +173,6 @@ const buildConfigWithMemoryDB = async () => {
             fallbackLanguage: 'en',
             supportedLanguages: { en, nb },
         },
-        sharp,
         typescript: {
             outputFile: path.resolve(dirname, 'payload-types.ts'),
         },

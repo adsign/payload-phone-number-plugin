@@ -1,0 +1,130 @@
+@layer payload-default {
+    .phone-number__region-code-select {
+        display: none;
+        position: absolute !important;
+        top: 100%;
+        z-index: var(--z-popup);
+        width: 100%;
+    }
+
+    .phone-number__region-code-select-open .phone-number__region-code-select {
+        display: block;
+    }
+
+    /* Hides the select's control so only its menu shows; the input stays focusable for arrow keys and type-to-filter. */
+    .react-select.phone-number__region-code-select .rs__control {
+        height: 0;
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        overflow: hidden;
+        opacity: 0;
+    }
+
+    .phone-number__input-container {
+        position: relative;
+    }
+
+    .phone-number__input-field .field-type__wrap {
+        display: flex;
+        align-items: stretch;
+        min-height: var(--field-min-height-large);
+        background: var(--field-color-bg);
+        border: var(--stroke-width-small) solid var(--field-color-border);
+        border-radius: var(--field-border-radius);
+        box-sizing: border-box;
+    }
+
+    /* Lays the prefix button and the input out in a row instead of Payload's stacked text field wrap. */
+    .field-type.text.phone-number__input-field .field-type__wrap {
+        flex-direction: row;
+        gap: 0;
+    }
+
+    .phone-number__input-field .field-type__wrap:hover {
+        border-color: var(--field-color-border-hover);
+    }
+
+    .phone-number__input-field .field-type__wrap:focus-within {
+        border-color: var(--field-color-border-focus);
+    }
+
+    .phone-number__input-field.read-only .field-type__wrap {
+        background: var(--field-color-bg-disabled);
+        border-color: var(--field-color-border-disabled);
+        color: var(--field-color-text-disabled);
+    }
+
+    .phone-number__input-field.error .field-type__wrap:not(:focus-within) {
+        border-color: var(--field-color-border-error);
+    }
+
+    .phone-number__input-field input {
+        flex: 1 1 0%;
+        min-width: 0;
+        min-height: unset;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        outline: none;
+    }
+
+    .phone-number__select-region-code-button {
+        background: none;
+        border: 0;
+        border-inline-end: var(--stroke-width-small) solid var(--field-color-border);
+        padding: 0 14px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 6px;
+        white-space: nowrap;
+    }
+
+    .phone-number__show-flag-emoji-and-calling-code .phone-number__select-region-code-button {
+        padding: 0 12px;
+        gap: 8px;
+    }
+
+    /* Sits the chevron right after the prefix, as Payload's own dropdown buttons do; the icon carries its own whitespace. */
+    .phone-number__select-region-code-button.phone-number__select-region-code-button-with-dropdown {
+        gap: 0;
+        padding-inline-end: var(--spacer-2);
+    }
+
+    .phone-number__input-field .field-type__wrap:hover .phone-number__select-region-code-button {
+        border-inline-end-color: var(--field-color-border-hover);
+    }
+
+    .phone-number__input-field .field-type__wrap:focus-within .phone-number__select-region-code-button {
+        border-inline-end-color: var(--field-color-border-focus);
+    }
+
+    .phone-number__input-field.read-only .field-type__wrap .phone-number__select-region-code-button {
+        border-inline-end-color: var(--field-color-border-disabled);
+    }
+
+    .phone-number__input-field.error .field-type__wrap:not(:focus-within) .phone-number__select-region-code-button {
+        border-inline-end-color: var(--field-color-border-error);
+    }
+
+    .phone-number__select-region-code-button .icon--chevron {
+        flex-shrink: 0;
+    }
+
+    .phone-number__select-region-code-button:disabled {
+        cursor: default;
+        color: var(--field-color-text-disabled);
+    }
+
+    .phone-number__country-prefix-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .phone-number__has-only-one-region-code .phone-number__select-region-code-button {
+        cursor: default;
+    }
+}

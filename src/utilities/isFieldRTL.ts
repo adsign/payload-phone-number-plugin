@@ -9,7 +9,7 @@ export function isFieldRTL({
 }: {
     fieldLocalized?: boolean;
     fieldRTL?: boolean;
-    locale: Locale;
+    locale: Locale | null;
     localizationConfig?: SanitizedLocalizationConfig;
 }): boolean {
     const hasMultipleLocales = locale && localizationConfig?.locales && localizationConfig.locales.length > 1;

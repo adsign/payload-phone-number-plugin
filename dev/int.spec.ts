@@ -23,6 +23,7 @@ describe('Phone Number Plugin integration tests', () => {
                 name: 'Test',
                 phoneNumber: '+4740612345',
             },
+            overrideAccess: true,
         });
 
         expect(employee.name).toBe('Test');
@@ -43,6 +44,7 @@ describe('Phone Number Plugin integration tests', () => {
                     name: 'Test',
                     phoneNumber: 'invalid-phone-number',
                 },
+                overrideAccess: true,
             })
         ).rejects.toThrow();
     });
@@ -55,6 +57,7 @@ describe('Phone Number Plugin integration tests', () => {
                 phoneNumber: '+4740612345',
                 phoneNumberNotRequired: null,
             },
+            overrideAccess: true,
         });
 
         expect(employee.name).toBe('Test');
@@ -69,6 +72,7 @@ describe('Phone Number Plugin integration tests', () => {
                     name: 'Test',
                     phoneNumber: '+16505553434',
                 },
+                overrideAccess: true,
             })
         ).rejects.toThrow();
     });
@@ -81,6 +85,7 @@ describe('Phone Number Plugin integration tests', () => {
                 phoneNumber: '+4740612345',
                 phoneNumberAnyCountry: '+4740612345',
             },
+            overrideAccess: true,
         });
 
         expect(employee.phoneNumberAnyCountry).toMatchObject({
@@ -94,6 +99,7 @@ describe('Phone Number Plugin integration tests', () => {
             data: {
                 phoneNumberAnyCountry: '+16505553434',
             },
+            overrideAccess: true,
         });
 
         expect(updatedEmployee.phoneNumberAnyCountry).toMatchObject({
@@ -110,6 +116,7 @@ describe('Phone Number Plugin integration tests', () => {
                 phoneNumber: '+4740612345',
                 phoneNumberNotRequired: '+16505553434',
             },
+            overrideAccess: true,
         });
 
         expect(employee.phoneNumberNotRequired).toMatchObject({
@@ -126,6 +133,7 @@ describe('Phone Number Plugin integration tests', () => {
                 phoneNumber: '+4740612345',
                 phoneNumberAnyCountry: '+16505553434',
             },
+            overrideAccess: true,
         });
 
         expect(employee.phoneNumberAnyCountry).toMatchObject({
@@ -143,6 +151,7 @@ describe('Phone Number Plugin integration tests', () => {
                     phoneNumber: '+4740612345',
                     phoneNumberAnyCountry: '+4915123456789',
                 },
+                overrideAccess: true,
             })
         ).rejects.toThrow();
     });
@@ -172,6 +181,7 @@ describe('Phone Number Plugin integration tests', () => {
                 name: 'Test',
                 phoneNumber,
             },
+            overrideAccess: true,
         });
 
         expect(employee.phoneNumber).toMatchObject({
@@ -184,6 +194,7 @@ describe('Phone Number Plugin integration tests', () => {
             context: {
                 phoneNumberPluginReturnRawValue: true,
             },
+            overrideAccess: true,
         });
 
         expect(employeeWithRawPhone.phoneNumber).toBe(phoneNumber);
