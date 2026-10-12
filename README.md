@@ -1,6 +1,6 @@
 # Payload CMS Phone Number Plugin
 
-[![Payload CMS](https://img.shields.io/badge/Payload%20CMS-v3-blue)](https://github.com/payloadcms/payload)
+[![Payload CMS](https://img.shields.io/badge/Payload%20CMS-v3%20%7C%20v4-blue)](https://github.com/payloadcms/payload)
 [![NPM Version](https://img.shields.io/npm/v/payload-phone-number-plugin)](https://www.npmjs.com/package/payload-phone-number-plugin)
 
 This Payload CMS plugin uses [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) to format and validate phone numbers.
@@ -18,11 +18,25 @@ This Payload CMS plugin uses [libphonenumber-js](https://www.npmjs.com/package/l
 - Built with Payload UI components so it feels native to the Admin Panel
 - i18n support for validation messages (PRs for new languages are welcome)
 
+## Compatibility
+
+| Payload | Plugin |
+| --- | --- |
+| v4 (beta) | 2.x (beta) |
+| v3 | 1.x |
+
+> [!NOTE]
+> Payload v4 is in beta, and its betas can include breaking changes. Plugin 2.x is updated for new Payload betas, but a new Payload beta may not be supported right away. 2.0.0 is released once Payload v4 is stable.
+
 ## Installation
 
 Install the `payload-phone-number-plugin` package into your project
 
 ```bash
+# Payload v4
+pnpm install payload-phone-number-plugin@beta
+
+# Payload v3
 pnpm install payload-phone-number-plugin
 ```
 

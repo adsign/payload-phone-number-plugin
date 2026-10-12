@@ -7,7 +7,7 @@ import { getPhoneNumberDetails } from '../utilities/getPhoneNumberDetails.js';
 
 import type { ConfiguredRegionCode, CellDisplayFormat, CountryPrefixDisplayFormat } from '../types.js';
 
-type PhoneNumberField<T extends ConfiguredRegionCode[] | undefined = undefined> = Omit<TextField, 'type' | 'hasMany' | 'typescriptSchema' | 'maxRows' | 'minRows' | 'admin'> & {
+type PhoneNumberField<T extends ConfiguredRegionCode[] | undefined = undefined> = Omit<TextField, 'type' | 'hasMany' | 'jsonSchema' | 'maxRows' | 'minRows' | 'admin'> & {
     /**
      * The default country region code for the field
      *
@@ -131,16 +131,16 @@ const phoneNumberField = <T extends ConfiguredRegionCode[] | undefined = undefin
                 },
             ],
         },
-        typescriptSchema: [
+        jsonSchema: [
             (): JSONSchema4 => {
                 if (!required) {
                     return {
-                        anyOf: [{ type: 'string' }, { $ref: '#/definitions/PhoneNumber' }, { type: 'null' }],
+                        anyOf: [{ type: 'string' }, { $ref: '#/$defs/PhoneNumber' }, { type: 'null' }],
                     };
                 }
 
                 return {
-                    anyOf: [{ type: 'string' }, { $ref: '#/definitions/PhoneNumber' }],
+                    anyOf: [{ type: 'string' }, { $ref: '#/$defs/PhoneNumber' }],
                 };
             },
         ],

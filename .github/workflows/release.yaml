@@ -1,6 +1,12 @@
 name: Release
 on:
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: The npm dist-tag to publish under. Leave empty for a stable release.
+        required: false
+        default: beta
+        type: string
 
 permissions:
   contents: read # for checkout
@@ -38,4 +44,10 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx release-it --ci
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          if [ -z "$PRERELEASE" ]; then
+            npx release-it --ci
+          else
+            npx release-it --ci --preRelease="$PRERELEASE" --github.preRelease
+          fi
